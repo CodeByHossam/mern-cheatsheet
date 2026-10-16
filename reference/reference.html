@@ -1,0 +1,779 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MERN Reference — Setup & Cheat Sheets</title>
+    <link rel="stylesheet" href="../css/styles.css" />
+  </head>
+  <body>
+    <button class="menu-toggle" id="menuToggle" aria-label="Toggle navigation">
+      ☰
+    </button>
+    <div class="overlay" id="overlay"></div>
+
+    <nav class="sidebar" id="sidebar">
+      <h2>MERN Reference</h2>
+      <div class="search-wrap">
+        <div class="search-field">
+          <input
+            type="search"
+            id="navSearch"
+            class="nav-search"
+            placeholder="Search sections…"
+            autocomplete="off"
+            aria-label="Search sections"
+          />
+        </div>
+        <span id="searchCount" class="search-count"></span>
+      </div>
+      <ul id="navList">
+        <li><a href="../reference/reference.html#s1">1. Environment Setup</a></li>
+        <li><a href="../reference/reference.html#s2">2. Folder Structure Diagram</a></li>
+        <li><a href="../backend/backend.html#s3">3. Backend Init</a></li>
+        <li><a href="../backend/backend.html#s4">4. Express Server</a></li>
+        <li><a href="../backend/backend.html#s5">5. Middlewares</a></li>
+        <li><a href="../backend/backend.html#s6">6. MongoDB + Mongoose</a></li>
+        <li><a href="../backend/backend.html#s7">7. Models / Controllers / Routes</a></li>
+        <li><a href="../backend/backend.html#s8">8. Validation &amp; Pagination</a></li>
+        <li><a href="../backend/backend.html#s9">9. Auth Deep-Dive (JWT + Cookies)</a></li>
+        <li><a href="../frontend/frontend.html#s10">10. Frontend Init</a></li>
+        <li><a href="../frontend/frontend.html#s11">11. Tailwind Setup</a></li>
+        <li><a href="../frontend/frontend.html#s12">12. Redux Toolkit (Counter)</a></li>
+        <li><a href="../frontend/frontend.html#s13">13. RTK Query + Injection</a></li>
+        <li><a href="../frontend/frontend.html#s14">14. React Boilerplate</a></li>
+        <li><a href="../frontend/frontend.html#s15">15. WebSockets (Socket.IO)</a></li>
+        <li><a href="../devops/devops.html#s16">16. Dev Workflow</a></li>
+        <li>
+          <a href="../devops/devops.html#s17">17. Testing (Jest + Supertest / Vitest)</a>
+          <ul>
+            <li><a href="../devops/devops.html#s17a">A. API — Jest + Supertest</a></li>
+            <li><a href="../devops/devops.html#s17b">B. UI — Vitest + RTL</a></li>
+          </ul>
+        </li>
+        <li>
+          <a href="../reference/reference.html#s18">18. TypeScript Setup + Commands</a>
+          <ul>
+            <li><a href="../reference/reference.html#s18a">A. Node / Express (CommonJS)</a></li>
+            <li><a href="../reference/reference.html#s18b">B. Vite (React / Vue)</a></li>
+          </ul>
+        </li>
+        <li><a href="../devops/devops.html#s19">19. CI/CD + Docs</a></li>
+        <li><a href="../devops/devops.html#s20">20. Docker Setup</a></li>
+        <li><a href="../devops/devops.html#s21">21. VPS + Nginx + SSL</a></li>
+        <li><a href="../devops/devops.html#s22">22. SSL &amp; Certificate Authority (CA)</a></li>
+        <li><a href="../reference/reference.html#s23">23. Commands Cheat Sheet</a></li>
+        <li><a href="../reference/reference.html#s24">24. Ubuntu Commands Cheat Sheet</a></li>
+        <li><a href="../reference/reference.html#s25">25. Git &amp; GitHub</a></li>
+      </ul>
+      <p id="searchEmpty" class="search-empty" hidden>No sections match.</p>
+      <p class="sidebar-home"><a href="../index.html">⌂ back to index</a></p>
+    </nav>
+
+    <main class="main-content">
+      <h1>Setup &amp; Reference</h1>
+      <p class="subtitle">Sections 1–2 and 18, 23–25 — environment, project layout, TypeScript, command cheat sheets, Git.</p>
+
+      <!-- ==================== SECTION 1 ==================== -->
+      <h2 id="s1">1. Environment Setup</h2>
+
+      <h3>install (global tools)</h3>
+      <pre><code>npm i -g nodemon pm2</code></pre>
+
+      <h3>node &amp; npm version check</h3>
+      <pre><code>node -v
+npm -v</code></pre>
+
+      <h3>.nvmrc</h3>
+      <pre><code>20.11.1</code></pre>
+
+      <h3>.gitignore</h3>
+      <pre><code>node_modules/
+dist/
+build/
+.env
+.env.local
+.env.*.local
+*.log
+npm-debug.log*
+.DS_Store
+coverage/
+.vscode/
+.idea/</code></pre>
+
+      <h3>.env.example (root)</h3>
+      <pre><code>NODE_ENV=development
+PORT=5000
+MONGO_URI=mongodb://127.0.0.1:27017/mernapp
+JWT_SECRET=change_me_to_a_long_random_string
+JWT_EXPIRES_IN=15m
+REFRESH_SECRET=change_me_refresh_secret
+REFRESH_EXPIRES_IN=30d
+CLIENT_URL=http://localhost:5173</code></pre>
+
+      <h3>.env.example (client)</h3>
+      <pre><code>VITE_API_URL=http://localhost:5000/api</code></pre>
+
+      <div class="callout">
+        <strong>Note:</strong> Never commit <code>.env</code>. Only commit
+        <code>.env.example</code>.
+      </div>
+
+      <!-- ==================== SECTION 2 ==================== -->
+      <h2 id="s2">
+        2. MERN Folder Structure Diagram — what goes in each folder
+      </h2>
+
+      <pre><code>mern-app/
+├─ package.json               # combined scripts: dev = server + client (concurrently)
+├─ docker-compose.yml         # mongo + server + client services
+├─ .github/workflows/ci.yml   # GitHub Actions: build + test
+│
+├─ server/                    # ───── EXPRESS API ─────
+│  ├─ src/
+│  │  ├─ server.ts            # entrypoint: connect DB + listen
+│  │  ├─ app.ts               # express app (exported for tests)
+│  │  ├─ db.ts                # mongoose.connect()
+│  │  ├─ config/              # env loading + validation (env.ts / env.zod.ts)
+│  │  ├─ controllers/         # CONTROLLERS — request handlers
+│  │  │  ├─ authController.js      #   register / login / logout / me
+│  │  │  ├─ userController.js      #   user CRUD
+│  │  │  └─ appointmentController.js
+│  │  ├─ routes/              # ROUTES — endpoint definitions + guards (thin)
+│  │  │  ├─ authRoutes.js
+│  │  │  ├─ userRoutes.js
+│  │  │  └─ appointmentRoutes.js
+│  │  ├─ services/            # SERVICES — operations + business logic
+│  │  │  ├─ emailService.js         # sends email via provider
+│  │  │  ├─ cloudinaryService.js    # image uploads via Cloudinary
+│  │  │  ├─ paymentService.js       # payments via provider
+│  │  │  └─ appointmentService.js   # internal ops (DB only, no external call)
+│  │  ├─ models/              # Mongoose schemas (User, Patient, Appointment …)
+│  │  ├─ middleware/          # MIDDLEWARES — HTTP request/response processing
+│  │  │  ├─ protect.js        #   verifies authentication (req.user)
+│  │  │  ├─ restrictTo.js     #   checks role / permissions
+│  │  │  ├─ errorHandler.js   #   central error handling
+│  │  │  ├─ rateLimit.js      #   per-IP rate limiting
+│  │  │  └─ notFound.js
+│  │  ├─ utils/               # UTILS — small, general reusable helpers
+│  │  │  ├─ formatDate.js     #   date/time formatting
+│  │  │  ├─ calculateAge.js   #   age from birthdate
+│  │  │  ├─ formatCurrency.js #   Intl.NumberFormat wrapper
+│  │  │  ├─ paginate.js       #   pagination helpers
+│  │  │  └─ apiResponse.js    #   unified { success, data, message }
+│  │  ├─ validation/          # express-validator rule arrays
+│  │  └─ types/               # TS types / DTOs (TS projects)
+│  ├─ tests/                  # Jest + Supertest suites
+│  ├─ seed.ts                 # npm run seed
+│  ├─ package.json
+│  └─ Dockerfile
+│
+└─ client/                    # ───── VITE REACT SPA ─────
+   ├─ index.html              # single HTML, mounts #root
+   ├─ vite.config.ts          # react plugin + dev proxy /api → :5000
+   ├─ tailwind.config.js
+   ├─ src/
+   │  ├─ main.tsx             # entry: Provider + BrowserRouter + App
+   │  ├─ App.tsx              # route tree (Layout + guards + pages)
+   │  ├─ index.css            # @tailwind directives + base styles
+   │  ├─ app/                 # Redux store (configureStore)
+   │  ├─ features/            # FEATURES — one folder per business domain
+   │  │  └─ appointments/
+   │  │     ├─ AppointmentsPage.jsx   # UI
+   │  │     ├─ appointmentsSlice.js    # Redux state for appointments
+   │  │     └─ appointmentsApi.js      # API requests (RTK Query / axios)
+   │  ├─ components/          # reusable UI (Layout, Navbar, ProtectedRoute)
+   │  ├─ pages/               # route-level screens (Home, Login, Dashboard)
+   │  ├─ hooks/               # custom React hooks
+   │  ├─ utils/               # small shared helpers (axios, formatCurrency)
+   │  └─ types/               # shared TS interfaces
+   ├─ package.json
+   └─ Dockerfile</code></pre>
+
+      <h3>the four concepts</h3>
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Concept</th>
+              <th>Main responsibility</th>
+              <th>Example</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Features</td>
+              <td>Organize code by functionality / business domain</td>
+              <td><code>appointments/</code></td>
+            </tr>
+            <tr>
+              <td>Services</td>
+              <td>
+                Perform operations + business logic (may call DB or external
+                providers)
+              </td>
+              <td><code>emailService.js</code></td>
+            </tr>
+            <tr>
+              <td>Utils</td>
+              <td>Small, general reusable helper functions</td>
+              <td><code>formatDate.js</code></td>
+            </tr>
+            <tr>
+              <td>Middlewares</td>
+              <td>Process HTTP requests and responses</td>
+              <td><code>protect.js</code></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout">
+        <strong>How they work together</strong> — a receptionist books an
+        appointment: <strong>Feature</strong> (appointments) organizes the flow
+        → <strong>Middleware</strong> (protect/restrictTo) checks auth +
+        permissions → <strong>Service</strong> (appointmentService checks
+        availability and creates the appointment) →
+        <strong>Utils</strong> (formatDate/calculateAge) when needed. Overlap is
+        allowed — services may live at
+        <code>features/appointments/services/</code>, and utils may be
+        feature-specific or shared. The goal is a clear responsibility per file,
+        not one mandatory layout.
+      </div>
+
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Location</th>
+              <th>What goes inside</th>
+              <th>What does NOT</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>server/controllers</td>
+              <td>Request handlers (auth, user, appointment…)</td>
+              <td>Database schema, route definitions</td>
+            </tr>
+            <tr>
+              <td>server/routes</td>
+              <td>Only endpoint paths + middleware order (thin)</td>
+              <td>Business logic</td>
+            </tr>
+            <tr>
+              <td>server/services</td>
+              <td>
+                Business-logic operations; may use DB or external providers
+              </td>
+              <td>Request handlers, route definitions</td>
+            </tr>
+            <tr>
+              <td>server/models</td>
+              <td>Mongoose schemas + methods/hooks</td>
+              <td>API/response logic</td>
+            </tr>
+            <tr>
+              <td>server/middleware</td>
+              <td>Cross-cutting: auth, roles, errors, rate limit</td>
+              <td>Route-specific handlers</td>
+            </tr>
+            <tr>
+              <td>server/utils</td>
+              <td>
+                Small reusable helpers (formatCurrency, paginate, apiResponse)
+              </td>
+              <td>Business logic</td>
+            </tr>
+            <tr>
+              <td>client/features</td>
+              <td>
+                Page UI + slice + api file for one domain (e.g. appointments)
+              </td>
+              <td>Global store config, shared UI</td>
+            </tr>
+            <tr>
+              <td>client/pages</td>
+              <td>Route-level screens (compose components)</td>
+              <td>Reusable primitives</td>
+            </tr>
+            <tr>
+              <td>client/components</td>
+              <td>Shared, reusable UI</td>
+              <td>Store wiring / one-page logic</td>
+            </tr>
+            <tr>
+              <td>client/app</td>
+              <td>Store factory only</td>
+              <td>Feature slices</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- ==================== SECTION 18 ==================== -->
+      <h2 id="s18">18. TypeScript Setup + Commands</h2>
+
+      <p>
+        Two supported setups. Pick the one that matches the project — the
+        <code>tsconfig.json</code> files differ on purpose. Both use
+        <code>moduleResolution: "bundler"</code> (so relative imports carry
+        <b>no</b> <code>.js</code> extension). Type A (Node) uses
+        <code>require</code> / <code>module.exports</code>; Type B (Vite) uses
+        <code>import</code> / <code>export</code>.
+      </p>
+
+      <h3 id="s18a">Project Type A — Node.js / Express (CommonJS)</h3>
+      <p><strong>install (copy-paste, no comments):</strong></p>
+      <pre><code>npm init -y
+npm i -D typescript tsx @types/node
+npm i express
+npm i -D @types/express
+npx tsc --init</code></pre>
+      <pre><code># 1. initialize package.json
+npm init -y
+
+# 2. dev dependencies (TypeScript compiler + tsx runner + Node types)
+npm i -D typescript tsx @types/node
+
+# 3. only if it is an Express API — Express itself + its types
+npm i express
+npm i -D @types/express</code></pre>
+
+      <pre><code>// package.json — the TypeScript-relevant fields
+{
+  "type": "commonjs",
+  "main": "dist/index.js",               //production entery point
+   "scripts": {
+    "dev": "tsx watch src/index.ts",     // Dev: run .ts + auto-reload
+    "build": "tsc",                      // Build: .ts → .js into dist/
+    "start": "node dist/index.js",       // Start: run compiled JS
+    "typecheck": "tsc --noEmit"          // Check types only, no output
+  }
+    
+}</code></pre>
+      <p>
+        <strong>type: "commonjs"</strong> tells Node to treat this folder's
+        <code>.js</code> output as CommonJS. Combined with the Node types below,
+        you can write plain <code>require</code> and
+        <code>module.exports</code> in your <code>.ts</code> files — no
+        <code>import</code> / <code>export</code> needed.
+      </p>
+
+      <pre><code>// tsconfig.json — Node.js compilerOptions
+"lib": ["esnext"],
+"types": ["node"]
+
+// install the Node types once
+npm install -D @types/node</code></pre>
+
+      <pre><code>// src/index.ts — require / module.exports
+const { fun3 } = require('./newFile');
+
+module.exports = { fun3 };</code></pre>
+<hr style="border: none; border-top: 1px solid gray; margin: 12px 0;">
+<br>
+
+      <pre><code>// tsconfig.json (server — exact)
+{
+  "compilerOptions": {
+    "lib": ["esnext"],
+    "target": "es2022",
+    "module": "commonjs",
+    "moduleResolution": "bundler",
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "forceConsistentCasingInFileNames": true,
+    "sourceMap": true,
+    "declaration": true,
+    "types": ["node"]
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist"]
+}</code></pre>
+
+      <pre><code>server/
+├── src/
+│   └── index.ts
+├── package.json
+└── tsconfig.json</code></pre>
+
+      <div class="callout">
+        <strong>Type A rules (Node.js):</strong> use <code>require</code> and
+        <code>module.exports</code>. The Node types
+        (<code>"types": ["node"]</code> + <code>npm i -D @types/node</code>)
+        give full typing and autocomplete for them. No file extensions:
+        <code>require('./file')</code>. Keep
+        <code>moduleResolution: "bundler"</code> — do not switch to
+        <code>nodenext</code> / <code>node16</code> (that forces
+        <code>.js</code> extensions).
+      </div>
+
+      <pre><code>// src/index.ts
+const express = require('express');
+
+const app = express();
+const PORT = Number(process.env.PORT) || 3000;
+
+app.get('/api/health', (_req, res) =&gt; {
+  res.json({ ok: true });
+});
+
+app.listen(PORT, () =&gt; console.log(`API on ${PORT}`));
+
+module.exports = app;</code></pre>
+
+      <h3>typing req.user (declaration merging)</h3>
+      <pre><code>// src/types/express.d.ts
+import { Request } from 'express';
+
+declare global {
+  namespace Express {
+    interface Request {
+      user?: {
+        _id: string;
+        name: string;
+        email: string;
+        role: 'user' | 'admin';
+      } | null;
+    }
+  }
+}
+
+export {};</code></pre>
+
+      <h3>Plain Node.js — no Express (Type A variant)</h3>
+      <p><strong>install (copy-paste, no comments):</strong></p>
+      <pre><code>npm init -y
+npm i -D typescript tsx @types/node
+npx tsc --init</code></pre>
+
+      <pre><code>// tsconfig.json (plain Node — no Express)
+{
+  "compilerOptions": {
+    "lib": ["esnext"],
+    "types": ["node"],
+    "target": "es2022",
+    "module": "commonjs",
+    "moduleResolution": "bundler",
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "resolveJsonModule": true
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist"]
+}</code></pre>
+
+      <pre><code>// package.json scripts (plain Node)
+{
+  "type": "commonjs",
+  "main": "dist/index.js",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "typecheck": "tsc --noEmit"
+  }
+}</code></pre>
+
+      <pre><code>// src/index.ts — Node built-ins only (http, fs, path, os...)
+const http = require('http');
+
+const server = http.createServer((req, res) =&gt; {
+  res.writeHead(200, { 'Content-Type': 'text/plain' });
+  res.end('Hello from plain Node.js');
+});
+
+server.listen(3000, () =&gt; console.log('API on 3000'));
+
+module.exports = server;</code></pre>
+
+      <div class="callout">
+        <strong>No Express?</strong> This is Type A minus
+        <code>express</code> and <code>@types/express</code>. Only
+        <code>@types/node</code> is needed. Everything else is identical:
+        CommonJS output, <code>require</code> /
+        <code>module.exports</code>, and the same
+        <code>tsconfig.json</code> keys (<code>lib</code> /
+        <code>types</code> / <code>moduleResolution</code>).
+      </div>
+
+      <h3 id="s18b">Project Type B — Vite (React / Vue / vanilla TS)</h3>
+      <p><strong>install (copy-paste, no comments):</strong></p>
+      <pre><code>npm create vite@latest my-app -- --template react-ts
+cd my-app
+npm install
+npm i -D @types/node
+npx tsc --init</code></pre>
+      <pre><code># create + install
+npm create vite@latest my-app -- --template react-ts
+cd my-app &amp;&amp; npm install
+
+# create into the CURRENT folder (no nested my-app/)
+npm create vite@latest . -- --template react-ts
+
+# Node types are needed for vite.config.ts only — NOT for src/ code
+npm i -D @types/node</code></pre>
+
+      <pre><code>// tsconfig.json (browser code — do NOT add "node" to types)
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "jsx": "react-jsx",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "lib": ["ES2022", "DOM", "DOM.Iterable"]
+  },
+  "include": ["src"]
+}</code></pre>
+
+      <pre><code>// tsconfig.node.json (for vite.config.ts only — scope Node types here)
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "strict": true,
+    "skipLibCheck": true,
+    "types": ["node"]
+  },
+  "include": ["vite.config.ts"]
+}</code></pre>
+
+      <div class="callout">
+        <strong>Type B import rules:</strong> no file extensions on imports
+        (bundler resolution). Use <code>import.meta.env.VITE_*</code> for env
+        vars — not <code>process.env</code>. Do not use <code>fs</code>,
+        <code>path</code>, or other Node APIs inside <code>src/</code> code. The
+        <code>react-ts</code> template ships <code>src/main.tsx</code> +
+        <code>src/App.tsx</code>; components live in <code>.tsx</code>, plain
+        logic/helpers in <code>.ts</code>.
+      </div>
+
+      <h3>verify the setup</h3>
+      <pre><code># Type A
+npm run start       # tsx watch src/index.ts
+npm run typecheck   # tsc --noEmit
+
+# Type B
+npm run dev         # vite dev server with HMR
+npm run build       # tsc -b &amp;&amp; vite build → type-checks THEN bundles
+npx tsc --noEmit    # type-check only (CI-safe)</code></pre>
+
+      <!-- ==================== SECTION 23 ==================== -->
+      <h2 id="s23">23. Commands Cheat Sheet</h2>
+
+      <h3>npm</h3>
+      <pre><code>npm init -y
+npm install
+npm i &lt;pkg&gt;
+npm i -D &lt;pkg&gt;
+npm i -g &lt;pkg&gt;
+npm ci
+npm run dev
+npm outdated
+npm update
+npm ls --depth=0
+npm audit fix
+npx &lt;pkg&gt;</code></pre>
+
+      <h3>Mongo</h3>
+      <pre><code>mongosh
+show dbs
+use mernapp
+db.users.find().pretty()
+db.users.deleteMany({})
+db.users.drop()</code></pre>
+
+      <h3>Git</h3>
+      <pre><code>git init
+git add .
+git commit -m "init"
+git branch -M main
+git remote add origin git@github.com:user/repo.git
+git push -u origin main
+git pull --rebase
+git log --oneline --graph --decorate</code></pre>
+
+      <h3>Docker</h3>
+      <pre><code>docker ps
+docker ps -a
+docker-compose up -d
+docker-compose down
+docker-compose logs -f server
+docker exec -it &lt;container&gt; sh
+docker system prune -a</code></pre>
+
+      <h3>PM2</h3>
+      <pre><code>pm2 list
+pm2 restart api
+pm2 logs api
+pm2 monit
+pm2 delete api
+pm2 save</code></pre>
+
+      <h3>Nginx</h3>
+      <pre><code>sudo nginx -t
+sudo systemctl reload nginx
+sudo systemctl restart nginx
+sudo tail -f /var/log/nginx/error.log</code></pre>
+
+      <h3>API testing (curl) + Swagger</h3>
+      <pre><code>curl -X POST http://localhost:5000/api/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"email":"admin@example.com","password":"admin123"}'
+
+curl -c cookies.txt -X POST http://localhost:5000/api/auth/register \
+  -H "Content-Type: application/json" \
+  -d '{"name":"Joe","email":"j@x.com","password":"secret1"}'
+
+curl -b cookies.txt http://localhost:5000/api/auth/me
+
+# interactive API docs (swagger)
+http://localhost:5000/api-docs</code></pre>
+
+      <!-- ==================== SECTION 24 ==================== -->
+      <h2 id="s24">24. Ubuntu Commands Cheat Sheet</h2>
+
+      <h3>packages &amp; updates</h3>
+      <pre><code>sudo apt update &amp;&amp; sudo apt upgrade -y
+sudo apt install -y git nginx curl
+sudo apt remove &lt;pkg&gt;
+sudo apt autoremove &amp;&amp; sudo apt clean
+apt search &lt;pkg&gt;</code></pre>
+
+      <h3>users &amp; permissions</h3>
+      <pre><code>whoami; id
+sudo adduser &lt;name&gt;
+sudo usermod -aG sudo &lt;name&gt;
+chmod 750 file            # rwx for owner, r-x group, none other
+chown user:group file
+stat -c '%a %U %G' file</code></pre>
+
+      <h3>files &amp; directories</h3>
+      <pre><code>pwd; ls -lah; cd ~; mkdir -p apps
+cp -r src dest; mv a b; rm -rf old
+find . -name "*.log"
+grep -rni "error" /var/log/nginx/
+tar -czvf backup.tar.gz folder/
+tar -xzvf backup.tar.gz
+wget URL; curl -I URL</code></pre>
+
+      <h3>processes &amp; systemd</h3>
+      <pre><code>ps aux | grep node
+top                      # or: htop
+kill -9 &lt;pid&gt;
+systemctl status nginx
+sudo systemctl enable nginx; sudo systemctl restart nginx
+journalctl -u nginx -f --no-pager</code></pre>
+
+      <h3>firewall (ufw) &amp; network</h3>
+      <pre><code>sudo ufw allow OpenSSH
+sudo ufw allow 'Nginx Full'
+sudo ufw enable; sudo ufw status verbose
+ss -tlnp                  # which ports are listening
+curl ifconfig.me          # public IP</code></pre>
+
+      <h3>disk &amp; memory</h3>
+      <pre><code>df -h
+du -sh *                  # folder sizes in current dir
+free -h; swapon --show</code></pre>
+
+      <h3>ssh &amp; transfer</h3>
+      <pre><code>ssh-keygen -t ed25519 -C "you@email.com"
+ssh user@ip -i ~/.ssh/id_ed25519
+scp file.txt user@ip:/home/user/
+rsync -avz folder/ user@ip:/home/user/folder/</code></pre>
+
+      <h3>scheduled jobs (cron)</h3>
+      <pre><code>crontab -e
+# run at 2:30am daily      →  30 2 * * * /path/to/script.sh
+systemctl list-timers      # systemd timers (preferred for services)</code></pre>
+
+      <!-- ==================== SECTION 25 ==================== -->
+      <h2 id="s25">25. Git &amp; GitHub</h2>
+
+      <h3>configure once</h3>
+      <pre><code>git config --global user.name "Your Name"
+git config --global user.email you@example.com
+git config --global init.defaultBranch main
+git config --global core.editor code --wait</code></pre>
+
+      <h3>daily loop</h3>
+      <pre><code>git status
+git add .
+git commit -m "feat: add login"
+git pull --rebase              # before pushing
+git push -u origin main</code></pre>
+
+      <h3>branches</h3>
+      <pre><code>git branch                    # list
+git checkout -b feature/x     # create + switch
+git switch main
+git merge feature/x
+git branch -d feature/x       # safe delete</code></pre>
+
+      <h3>history &amp; undo</h3>
+      <pre><code>git log --oneline --graph --decorate
+git diff
+git stash &amp;&amp; git stash pop
+git reset --soft HEAD~1       # undo commit, keep changes staged
+git reset --hard HEAD~1       # DISCARD commit + changes (dangerous)
+git revert &lt;sha&gt;              # safe inverse commit
+
+git restore file.txt          # discard uncommitted changes to a file</code></pre>
+
+      <h3>remotes &amp; tags</h3>
+      <pre><code>git remote add origin git@github.com:user/repo.git
+git remote -v
+git tag v1.0.0
+git push origin --tags</code></pre>
+
+      <h3>pull request flow</h3>
+      <pre><code>git checkout -b feature/x
+git add . &amp;&amp; git commit -m "feat: x"
+git push -u origin feature/x
+# open the PR link Git prints, or via CLI:
+gh pr create --title "x" --body "what &amp; why"</code></pre>
+
+      <h3>GitHub CLI (gh)</h3>
+      <pre><code>gh auth login
+gh repo create myapp --public --source . --remote origin --push
+gh pr create / gh pr list / gh pr merge / gh pr checkout
+gh issue create / gh issue list
+gh run list / gh run watch      # CI pipelines
+gh release create v1.0.0 --generate-notes</code></pre>
+
+      <h3>.gitignore essentials</h3>
+      <pre><code>node_modules/
+dist/
+build/
+.env
+.env.*.local
+*.log
+.DS_Store
+coverage/</code></pre>
+
+      <div class="callout">
+        <strong>Good hygiene:</strong> small focused commits,
+        <code>git pull --rebase</code> instead of merge commits, atomic PRs, and
+        never commit <code>.env</code> or <code>*.pem</code> files.
+      </div>
+    </main>
+
+    <script src="../js/main.js"></script>
+  </body>
+</html>

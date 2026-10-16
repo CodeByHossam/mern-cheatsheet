@@ -1,0 +1,1140 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MERN Reference — Frontend</title>
+    <link rel="stylesheet" href="../css/styles.css" />
+  </head>
+  <body>
+    <button class="menu-toggle" id="menuToggle" aria-label="Toggle navigation">
+      ☰
+    </button>
+    <div class="overlay" id="overlay"></div>
+
+    <nav class="sidebar" id="sidebar">
+      <h2>MERN Reference</h2>
+      <div class="search-wrap">
+        <div class="search-field">
+          <input
+            type="search"
+            id="navSearch"
+            class="nav-search"
+            placeholder="Search sections…"
+            autocomplete="off"
+            aria-label="Search sections"
+          />
+        </div>
+        <span id="searchCount" class="search-count"></span>
+      </div>
+      <ul id="navList">
+        <li><a href="../reference/reference.html#s1">1. Environment Setup</a></li>
+        <li><a href="../reference/reference.html#s2">2. Folder Structure Diagram</a></li>
+        <li><a href="../backend/backend.html#s3">3. Backend Init</a></li>
+        <li><a href="../backend/backend.html#s4">4. Express Server</a></li>
+        <li><a href="../backend/backend.html#s5">5. Middlewares</a></li>
+        <li><a href="../backend/backend.html#s6">6. MongoDB + Mongoose</a></li>
+        <li><a href="../backend/backend.html#s7">7. Models / Controllers / Routes</a></li>
+        <li><a href="../backend/backend.html#s8">8. Validation &amp; Pagination</a></li>
+        <li><a href="../backend/backend.html#s9">9. Auth Deep-Dive (JWT + Cookies)</a></li>
+        <li><a href="../frontend/frontend.html#s10">10. Frontend Init</a></li>
+        <li><a href="../frontend/frontend.html#s11">11. Tailwind Setup</a></li>
+        <li><a href="../frontend/frontend.html#s12">12. Redux Toolkit (Counter)</a></li>
+        <li><a href="../frontend/frontend.html#s13">13. RTK Query + Injection</a></li>
+        <li><a href="../frontend/frontend.html#s14">14. React Boilerplate</a></li>
+        <li><a href="../frontend/frontend.html#s15">15. WebSockets (Socket.IO)</a></li>
+        <li><a href="../devops/devops.html#s16">16. Dev Workflow</a></li>
+        <li>
+          <a href="../devops/devops.html#s17">17. Testing (Jest + Supertest / Vitest)</a>
+          <ul>
+            <li><a href="../devops/devops.html#s17a">A. API — Jest + Supertest</a></li>
+            <li><a href="../devops/devops.html#s17b">B. UI — Vitest + RTL</a></li>
+          </ul>
+        </li>
+        <li>
+          <a href="../reference/reference.html#s18">18. TypeScript Setup + Commands</a>
+          <ul>
+            <li><a href="../reference/reference.html#s18a">A. Node / Express (CommonJS)</a></li>
+            <li><a href="../reference/reference.html#s18b">B. Vite (React / Vue)</a></li>
+          </ul>
+        </li>
+        <li><a href="../devops/devops.html#s19">19. CI/CD + Docs</a></li>
+        <li><a href="../devops/devops.html#s20">20. Docker Setup</a></li>
+        <li><a href="../devops/devops.html#s21">21. VPS + Nginx + SSL</a></li>
+        <li><a href="../devops/devops.html#s22">22. SSL &amp; Certificate Authority (CA)</a></li>
+        <li><a href="../reference/reference.html#s23">23. Commands Cheat Sheet</a></li>
+        <li><a href="../reference/reference.html#s24">24. Ubuntu Commands Cheat Sheet</a></li>
+        <li><a href="../reference/reference.html#s25">25. Git &amp; GitHub</a></li>
+      </ul>
+      <p id="searchEmpty" class="search-empty" hidden>No sections match.</p>
+      <p class="sidebar-home"><a href="../index.html">⌂ back to index</a></p>
+    </nav>
+
+    <main class="main-content">
+      <h1>Frontend — Vite + React</h1>
+      <p class="subtitle">Sections 10–15 — Vite, Tailwind, Redux Toolkit, RTK Query, React boilerplate, WebSockets.</p>
+
+      <!-- ==================== SECTION 10 ==================== -->
+      <h2 id="s10">10. Frontend — Vite + React Initialization</h2>
+
+      <h3>create project</h3>
+      <pre><code>npm create vite@latest client -- --template react
+cd client
+npm install</code></pre>
+
+      <h3>create project in the CURRENT folder (no new client/ folder)</h3>
+      <pre><code># run INSIDE the folder where the app should live — "." = current directory
+npm create vite@latest . -- --template react
+npm install
+npm run dev</code></pre>
+
+      <div class="callout">
+        <strong>Same folder vs <code>client/</code>:</strong>
+        <code>npm create vite@latest . -- --template react</code> scaffolds
+        <code>index.html</code> + <code>src/</code> right here (Vite asks before
+        touching a non-empty folder). Scripts then run from this folder
+        directly — <code>npm run dev</code> instead of
+        <code>npm run dev --prefix client</code> (Section 16). Keep the
+        separate <code>client/</code> folder when you follow the two-folder
+        layout used everywhere else in this doc (Section 2).
+      </div>
+
+      <h3>install deps</h3>
+      <pre><code>npm i react-router-dom @reduxjs/toolkit react-redux axios react-icons react-hook-form zod @hookform/resolvers react-hot-toast
+npm i -D tailwindcss postcss autoprefixer</code></pre>
+
+      <h3>vite.config.js (proxy)</h3>
+      <pre><code>import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+
+export default defineConfig({
+  plugins: [react()],
+  server: {
+    port: 5173,
+    proxy: {
+      '/api': {
+        target: 'http://localhost:5000',
+        changeOrigin: true
+      }
+    }
+  }
+});</code></pre>
+
+      <div class="callout">
+        <strong>Note:</strong> Vite proxy only works in dev. In production,
+        Nginx handles <code>/api</code>.
+      </div>
+
+      <!-- ==================== SECTION 11 ==================== -->
+      <h2 id="s11">11. Frontend — Tailwind CSS Setup</h2>
+
+      <h3>install</h3>
+      <pre><code>npm i -D tailwindcss postcss autoprefixer</code></pre>
+
+      <h3>init tailwind</h3>
+      <pre><code>npx tailwindcss init -p</code></pre>
+
+      <h3>tailwind.config.js</h3>
+      <pre><code>/** @type {import('tailwindcss').Config} */
+export default {
+  content: ['./index.html', './src/**/*.{js,jsx,ts,tsx}'],
+  theme: {
+    extend: {
+      colors: {
+        brand: {
+          50: '#eff6ff',
+          500: '#3b82f6',
+          700: '#1d4ed8'
+        }
+      },
+      fontFamily: {
+        sans: ['Inter', 'system-ui', 'sans-serif']
+      }
+    }
+  },
+  plugins: []
+};</code></pre>
+
+      <h3>postcss.config.js</h3>
+      <pre><code>export default {
+  plugins: {
+    tailwindcss: {},
+    autoprefixer: {}
+  }
+};</code></pre>
+
+      <h3>src/index.css</h3>
+      <pre><code>@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-slate-50 text-slate-800 antialiased;
+  }
+  h1 { @apply text-2xl font-bold; }
+  h2 { @apply text-xl font-semibold; }
+  a  { @apply text-blue-600 hover:underline; }
+}
+
+@layer components {
+  .btn {
+    @apply inline-flex items-center justify-center px-4 py-2 rounded-md
+           font-medium transition-colors disabled:opacity-50;
+  }
+  .btn-primary {
+    @apply btn bg-blue-600 text-white hover:bg-blue-700;
+  }
+  .btn-outline {
+    @apply btn border border-slate-300 hover:bg-slate-100;
+  }
+  .card {
+    @apply bg-white rounded-lg shadow-sm border border-slate-200 p-5;
+  }
+  .input {
+    @apply w-full px-3 py-2 border border-slate-300 rounded-md
+           focus:outline-none focus:ring-2 focus:ring-blue-500;
+  }
+}
+
+@layer utilities {
+  .container-page {
+    @apply max-w-6xl mx-auto px-4;
+  }
+}</code></pre>
+
+      <!-- ==================== SECTION 12 ==================== -->
+      <h2 id="s12">12. Frontend — Redux Toolkit (Counter Example)</h2>
+
+      <h3>install</h3>
+      <pre><code>npm i @reduxjs/toolkit react-redux</code></pre>
+
+      <h3>src/app/store.js</h3>
+      <pre><code>import { configureStore } from '@reduxjs/toolkit';
+import counterReducer from '../features/counter/counterSlice';
+import authReducer from '../features/auth/authSlice';
+import { apiSlice } from '../features/api/apiSlice';
+
+export const store = configureStore({
+  reducer: {
+    counter: counterReducer,
+    auth: authReducer,
+    [apiSlice.reducerPath]: apiSlice.reducer
+  },
+  middleware: (getDefault) =&gt; getDefault().concat(apiSlice.middleware),
+  devTools: true
+});</code></pre>
+
+      <h3>src/features/counter/counterSlice.js</h3>
+      <pre><code>import { createSlice } from '@reduxjs/toolkit';
+
+const initialState = { value: 0 };
+
+const counterSlice = createSlice({
+  name: 'counter',
+  initialState,
+  reducers: {
+    increment: (state) =&gt; { state.value += 1; },
+    decrement: (state) =&gt; { state.value -= 1; },
+    incrementByAmount: (state, action) =&gt; { state.value += action.payload; },
+    reset: (state) =&gt; { state.value = 0; }
+  }
+});
+
+export const { increment, decrement, incrementByAmount, reset } = counterSlice.actions;
+export default counterSlice.reducer;</code></pre>
+
+      <h3>use in a component</h3>
+      <pre><code>import { useSelector, useDispatch } from 'react-redux';
+import { increment, decrement, reset } from './counterSlice';
+
+export default function Counter() {
+  const count = useSelector((s) =&gt; s.counter.value);
+  const dispatch = useDispatch();
+
+  return (
+    &lt;div className="card flex items-center gap-3"&gt;
+      &lt;button className="btn-outline" onClick={() =&gt; dispatch(decrement())}&gt;-&lt;/button&gt;
+      &lt;span className="text-lg font-bold"&gt;{count}&lt;/span&gt;
+      &lt;button className="btn-primary" onClick={() =&gt; dispatch(increment())}&gt;+&lt;/button&gt;
+      &lt;button className="btn-outline" onClick={() =&gt; dispatch(reset())}&gt;Reset&lt;/button&gt;
+    &lt;/div&gt;
+  );
+}</code></pre>
+
+      <h3>main.jsx provider wrapper</h3>
+      <pre><code>import React from 'react';
+import ReactDOM from 'react-dom/client';
+import { Provider } from 'react-redux';
+import { store } from './app/store';
+import App from './App';
+import './index.css';
+
+ReactDOM.createRoot(document.getElementById('root')).render(
+  &lt;React.StrictMode&gt;
+    &lt;Provider store={store}&gt;
+      &lt;App /&gt;
+    &lt;/Provider&gt;
+  &lt;/React.StrictMode&gt;
+);</code></pre>
+
+      <!-- ==================== SECTION 13 ==================== -->
+      <h2 id="s13">13. Frontend — RTK Query Base API + Endpoint Injection</h2>
+
+      <h3>install</h3>
+      <pre><code>npm i @reduxjs/toolkit react-redux</code></pre>
+
+      <h3>src/features/api/apiSlice.js</h3>
+      <pre><code>import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+
+const rawBaseQuery = fetchBaseQuery({
+  baseUrl: '/api',
+  credentials: 'include'
+});
+
+// retry once after a 401 by hitting /auth/refresh (rotates the cookie)
+const baseQueryWithReauth = async (args, api, extraOptions) =&gt; {
+  const result = await rawBaseQuery(args, api, extraOptions);
+  if (result?.error?.status === 401) {
+    const refresh = await rawBaseQuery('/auth/refresh', api, extraOptions);
+    if (refresh?.data) {
+      return rawBaseQuery(args, api, extraOptions);
+    }
+    api.dispatch({ type: 'auth/logout' });
+  }
+  return result;
+};
+
+export const apiSlice = createApi({
+  reducerPath: 'api',
+  baseQuery: baseQueryWithReauth,
+  tagTypes: ['User', 'Auth'],
+  endpoints: () =&gt; ({})
+});</code></pre>
+
+      <div class="callout">
+        <strong>Note:</strong> Auth is cookie-based, so no
+        <code>prepareHeaders</code> is needed — the browser sends the httpOnly
+        cookie automatically. If you switch to a Bearer-token approach instead,
+        re-add <code>prepareHeaders</code> reading from
+        <code>getState().auth</code> or localStorage.
+        <strong>Base URL:</strong> relative <code>/api</code> is proxied by Vite
+        in dev (Section 10) and Nginx in prod (Section 21) —
+        <code>VITE_API_URL</code> is only needed if you call the API
+        cross-origin.
+      </div>
+
+      <h3>src/features/api/authApiSlice.js</h3>
+      <pre><code>import { apiSlice } from './apiSlice';
+
+export const authApiSlice = apiSlice.injectEndpoints({
+  endpoints: (builder) =&gt; ({
+    login: builder.mutation({
+      query: (creds) =&gt; ({
+        url: '/auth/login',
+        method: 'POST',
+        body: creds
+      }),
+      invalidatesTags: ['Auth']
+    }),
+    register: builder.mutation({
+      query: (data) =&gt; ({
+        url: '/auth/register',
+        method: 'POST',
+        body: data
+      })
+    }),
+    logout: builder.mutation({
+      query: () =&gt; ({
+        url: '/auth/logout',
+        method: 'POST'
+      }),
+      invalidatesTags: ['Auth']
+    }),
+    getMe: builder.query({
+      query: () =&gt; '/auth/me',
+      providesTags: ['Auth']
+    })
+  })
+});
+
+export const {
+  useLoginMutation,
+  useRegisterMutation,
+  useLogoutMutation,
+  useGetMeQuery
+} = authApiSlice;</code></pre>
+
+      <h3>src/features/api/usersApiSlice.js</h3>
+      <pre><code>import { apiSlice } from './apiSlice';
+
+export const usersApiSlice = apiSlice.injectEndpoints({
+  endpoints: (builder) =&gt; ({
+    getUsers: builder.query({
+      query: () =&gt; '/users',
+      // unwrap { success, data, message } so components read items directly
+      transformResponse: (res) =&gt; res.data,
+      providesTags: ['User']
+    }),
+    getUserById: builder.query({
+      query: (id) =&gt; `/users/${id}`,
+      transformResponse: (res) =&gt; res.data,
+      providesTags: (r, e, id) =&gt; [{ type: 'User', id }]
+    }),
+    updateUser: builder.mutation({
+      query: ({ id, ...body }) =&gt; ({
+        url: `/users/${id}`,
+        method: 'PUT',
+        body
+      }),
+      invalidatesTags: (r, e, { id }) =&gt; [{ type: 'User', id }, 'User']
+    })
+  })
+});
+
+export const {
+  useGetUsersQuery,
+  useGetUserByIdQuery,
+  useUpdateUserMutation
+} = usersApiSlice;</code></pre>
+
+      <h3>use in a component</h3>
+      <pre><code>import { useGetUsersQuery, useUpdateUserMutation } from '../features/api/usersApiSlice';
+
+export default function UsersList() {
+  const { data, isLoading, isError, error } = useGetUsersQuery();
+  const [updateUser] = useUpdateUserMutation();
+
+  if (isLoading) return &lt;p&gt;Loading...&lt;/p&gt;;
+  if (isError) return &lt;p&gt;Error: {error?.data?.message || 'failed'}&lt;/p&gt;;
+
+  return (
+    &lt;ul className="space-y-2"&gt;
+      {data.items.map((u) =&gt; (
+        &lt;li key={u._id} className="card flex justify-between"&gt;
+          &lt;span&gt;{u.name} — {u.email}&lt;/span&gt;
+          &lt;button
+            className="btn-outline"
+            onClick={() =&gt; updateUser({ id: u._id, name: 'Updated' })}
+          &gt;
+            Rename
+          &lt;/button&gt;
+        &lt;/li&gt;
+      ))}
+    &lt;/ul&gt;
+  );
+}</code></pre>
+
+      <h3>invalidate tags after mutation</h3>
+      <pre><code>// in the mutation builder
+invalidatesTags: ['User']
+// or scoped to a single item
+invalidatesTags: (result, error, arg) =&gt; [{ type: 'User', id: arg.id }]</code></pre>
+
+      <!-- ==================== SECTION 14 ==================== -->
+      <h2 id="s14">14. Frontend — Common React Boilerplate</h2>
+
+      <h3>install</h3>
+      <pre><code>npm i react-router-dom react-redux react-hot-toast react-hook-form @hookform/resolvers zod axios</code></pre>
+
+      <h3>src/main.jsx</h3>
+      <pre><code>import React from 'react';
+import ReactDOM from 'react-dom/client';
+import { Provider } from 'react-redux';
+import { BrowserRouter } from 'react-router-dom';
+import { Toaster } from 'react-hot-toast';
+import { store } from './app/store';
+import App from './App';
+import ErrorBoundary from './components/ErrorBoundary';
+import './index.css';
+
+ReactDOM.createRoot(document.getElementById('root')).render(
+  &lt;React.StrictMode&gt;
+    &lt;ErrorBoundary&gt;
+      &lt;Provider store={store}&gt;
+        &lt;BrowserRouter&gt;
+          &lt;App /&gt;
+        &lt;/BrowserRouter&gt;
+      &lt;/Provider&gt;
+      &lt;Toaster position="top-right" /&gt;
+    &lt;/ErrorBoundary&gt;
+  &lt;/React.StrictMode&gt;
+);</code></pre>
+
+      <h3>src/features/auth/authSlice.js</h3>
+      <pre><code>import { createSlice } from '@reduxjs/toolkit';
+
+const initialUser = JSON.parse(localStorage.getItem('user')) || null;
+
+const authSlice = createSlice({
+  name: 'auth',
+  initialState: { user: initialUser },
+  reducers: {
+    setCredentials: (state, action) =&gt; {
+      state.user = action.payload;
+      localStorage.setItem('user', JSON.stringify(action.payload));
+    },
+    logout: (state) =&gt; {
+      state.user = null;
+      localStorage.removeItem('user');
+    }
+  }
+});
+
+export const { setCredentials, logout } = authSlice.actions;
+export default authSlice.reducer;</code></pre>
+
+      <h3>src/App.jsx — layout routes + wrapper-tag guards</h3>
+      <pre><code>import { lazy, Suspense } from 'react';
+import { Routes, Route } from 'react-router-dom';
+import Layout from './components/Layout';
+import ProtectedRoute from './components/ProtectedRoute';
+import AdminRoute from './components/AdminRoute';
+
+// lazy-loaded pages → code-split per route
+const Home = lazy(() =&gt; import('./pages/Home'));
+const Login = lazy(() =&gt; import('./pages/Login'));
+const Dashboard = lazy(() =&gt; import('./pages/Dashboard'));
+const AdminPanel = lazy(() =&gt; import('./pages/AdminPanel'));
+const NotFound = lazy(() =&gt; import('./pages/NotFound'));
+
+export default function App() {
+  return (
+    &lt;Suspense fallback={&lt;div className="p-4"&gt;Loading...&lt;/div&gt;}&gt;
+      &lt;Routes&gt;
+        &lt;Route path="/" element={&lt;Layout /&gt;}&gt;
+          &lt;Route index element={&lt;Home /&gt;} /&gt;
+          &lt;Route path="login" element={&lt;Login /&gt;} /&gt;
+
+          {/* guard is a WRAPPER route — children render into its Outlet */}
+          &lt;Route element={&lt;ProtectedRoute /&gt;}&gt;
+            &lt;Route path="dashboard" element={&lt;Dashboard /&gt;} /&gt;
+          &lt;/Route&gt;
+
+          &lt;Route element={&lt;AdminRoute /&gt;}&gt;
+            &lt;Route path="admin" element={&lt;AdminPanel /&gt;} /&gt;
+          &lt;/Route&gt;
+
+          &lt;Route path="*" element={&lt;NotFound /&gt;} /&gt;
+        &lt;/Route&gt;
+      &lt;/Routes&gt;
+    &lt;/Suspense&gt;
+  );
+}</code></pre>
+
+      <h3>src/components/Layout.jsx</h3>
+      <pre><code>import { Outlet } from 'react-router-dom';
+import Navbar from './Navbar';
+
+export default function Layout() {
+  return (
+    &lt;div className="min-h-screen flex flex-col"&gt;
+      &lt;Navbar /&gt;
+      &lt;main className="flex-1 container-page pt-20 pb-10"&gt;
+        &lt;Outlet /&gt;
+      &lt;/main&gt;
+    &lt;/div&gt;
+  );
+}</code></pre>
+
+      <h3>src/components/Navbar.jsx — role-gated UI</h3>
+      <pre><code>import { Link, useNavigate } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { useLogoutMutation } from '../features/api/authApiSlice';
+import { logout as clearLocalUser } from '../features/auth/authSlice';
+
+export default function Navbar() {
+  const { user } = useSelector((s) =&gt; s.auth);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const [logout] = useLogoutMutation();
+
+  const onLogout = async () =&gt; {
+    await logout();
+    dispatch(clearLocalUser()); // clears persisted user from localStorage
+    navigate('/login');
+  };
+
+  return (
+    &lt;nav className="border-b bg-white shadow-sm"&gt;
+      &lt;div className="container-page flex items-center justify-between py-3"&gt;
+        &lt;Link to="/" className="font-bold text-lg"&gt;MERN&lt;/Link&gt;
+        &lt;div className="flex items-center gap-4"&gt;
+          {user ? (
+            &lt;&gt;
+              {user.role === 'admin' &amp;&amp; &lt;Link to="/admin"&gt;Admin&lt;/Link&gt;}
+              &lt;Link to="/dashboard"&gt;Dashboard&lt;/Link&gt;
+              &lt;button className="btn-outline" onClick={onLogout}&gt;Logout&lt;/button&gt;
+            &lt;/&gt;
+          ) : (
+            &lt;Link to="/login" className="btn-primary"&gt;Login&lt;/Link&gt;
+          )}
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/nav&gt;
+  );
+}</code></pre>
+
+      <h3>
+        src/components/ProtectedRoute.jsx — wrapper guard (renders Outlet)
+      </h3>
+      <pre><code>import { Navigate, Outlet, useLocation } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+
+export default function ProtectedRoute() {
+  const { user } = useSelector((s) =&gt; s.auth);
+  const location = useLocation();
+  if (!user) return &lt;Navigate to="/login" replace state={{ from: location }} /&gt;;
+  return &lt;Outlet /&gt;;
+}</code></pre>
+
+      <h3>src/components/AdminRoute.jsx — role-based guard</h3>
+      <pre><code>import { Navigate, Outlet } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+
+export default function AdminRoute() {
+  const { user } = useSelector((s) =&gt; s.auth);
+  if (!user) return &lt;Navigate to="/login" replace /&gt;;
+  if (user.role !== 'admin') return &lt;Navigate to="/dashboard" replace /&gt;;
+  return &lt;Outlet /&gt;;
+}</code></pre>
+
+      <h3>src/components/ErrorBoundary.jsx</h3>
+      <pre><code>import { Component } from 'react';
+
+export default class ErrorBoundary extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { hasError: false };
+  }
+
+  static getDerivedStateFromError() {
+    return { hasError: true };
+  }
+
+  componentDidCatch(error, info) {
+    console.error(error, info);
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return (
+        &lt;div className="card m-8 text-center"&gt;
+          &lt;p className="font-bold"&gt;Something went wrong.&lt;/p&gt;
+        &lt;/div&gt;
+      );
+    }
+    return this.props.children;
+  }
+}</code></pre>
+
+      <h3>pages/Login.jsx — react-hook-form + zod + toast</h3>
+      <pre><code>import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import toast from 'react-hot-toast';
+import { useLoginMutation } from '../features/api/authApiSlice';
+import { setCredentials } from '../features/auth/authSlice';
+
+const schema = z.object({
+  email: z.string().email('Invalid email'),
+  password: z.string().min(6, 'Min 6 characters')
+});
+
+export default function Login() {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [login, { isLoading }] = useLoginMutation();
+
+  const { register, handleSubmit, formState: { errors } } = useForm({
+    resolver: zodResolver(schema)
+  });
+
+  const onLogin = handleSubmit(async (values) =&gt; {
+    try {
+      const res = await login(values).unwrap(); // { success, data, message }
+      dispatch(setCredentials(res.data));
+      toast.success(res.message);
+      navigate(location.state?.from?.pathname || '/dashboard', { replace: true });
+    } catch (err) {
+      toast.error(err?.data?.message || 'Login failed');
+    }
+  });
+
+  return (
+    &lt;form onSubmit={onLogin} className="card max-w-sm mx-auto mt-10 space-y-4"&gt;
+      &lt;input className="input" placeholder="Email" {...register('email')} /&gt;
+      {errors.email &amp;&amp; &lt;p className="text-red-600 text-sm"&gt;{errors.email.message}&lt;/p&gt;}
+      &lt;input className="input" type="password" placeholder="Password" {...register('password')} /&gt;
+      {errors.password &amp;&amp; &lt;p className="text-red-600 text-sm"&gt;{errors.password.message}&lt;/p&gt;}
+      &lt;button className="btn-primary w-full" type="submit" disabled={isLoading}&gt;
+        {isLoading ? 'Signing in...' : 'Login'}
+      &lt;/button&gt;
+    &lt;/form&gt;
+  );
+}</code></pre>
+
+      <h3>pages/Dashboard.jsx</h3>
+      <pre><code>import { useSelector } from 'react-redux';
+
+export default function Dashboard() {
+  const { user } = useSelector((s) =&gt; s.auth);
+  return (
+    &lt;div className="card"&gt;
+      &lt;h1&gt;Welcome, {user?.name}&lt;/h1&gt;
+      &lt;p className="mt-1 text-slate-500"&gt;{user?.email} · {user?.role}&lt;/p&gt;
+    &lt;/div&gt;
+  );
+}</code></pre>
+
+      <h3>pages/AdminPanel.jsx</h3>
+      <pre><code>import { useGetUsersQuery } from '../features/api/usersApiSlice';
+
+export default function AdminPanel() {
+  const { data, isLoading, isError, error } = useGetUsersQuery();
+
+  if (isLoading) return &lt;p&gt;Loading...&lt;/p&gt;;
+  if (isError) return &lt;p&gt;Error: {error?.data?.message || 'failed'}&lt;/p&gt;;
+
+  return (
+    &lt;div&gt;
+      &lt;h1&gt;Admin Panel&lt;/h1&gt;
+      &lt;ul className="mt-4 space-y-2"&gt;
+        {data.items.map((u) =&gt; (
+          &lt;li key={u._id} className="card flex justify-between"&gt;
+            &lt;span&gt;{u.name} — {u.email} — {u.role}&lt;/span&gt;
+          &lt;/li&gt;
+        ))}
+      &lt;/ul&gt;
+    &lt;/div&gt;
+  );
+}</code></pre>
+
+      <h3>pages/Home.jsx / NotFound.jsx</h3>
+      <pre><code>// Home.jsx — public landing
+export default function Home() {
+  return (
+    &lt;div className="text-center py-16"&gt;
+      &lt;h1 className="text-3xl font-bold"&gt;MERN Boilerplate&lt;/h1&gt;
+      &lt;p className="mt-2 text-slate-500"&gt;Vite + RTK + Tailwind + Express + Mongo&lt;/p&gt;
+    &lt;/div&gt;
+  );
+}</code></pre>
+
+      <pre><code>// NotFound.jsx
+import { Link } from 'react-router-dom';
+
+export default function NotFound() {
+  return (
+    &lt;div className="text-center py-20"&gt;
+      &lt;p className="text-6xl font-bold"&gt;404&lt;/p&gt;
+      &lt;p className="mt-2 text-slate-500"&gt;Page not found&lt;/p&gt;
+      &lt;Link to="/" className="btn-primary inline-block mt-6"&gt;Go home&lt;/Link&gt;
+    &lt;/div&gt;
+  );
+}</code></pre>
+
+      <div class="callout">
+        <strong>Why wrapper tags?</strong> In React Router v6/v7, route guards
+        are mounted as <code>&lt;Route element={...} /&gt;</code> and render
+        their nested routes into an <code>&lt;Outlet /&gt;</code>. This
+        guarantees redirects happen before any child mounts, keeps guards
+        reusable, and supports arbitrary nesting (e.g.
+        <code>Layout → ProtectedRoute → AdminRoute → page</code>).
+      </div>
+
+      <h3>axios instance (alternative to RTK Query) + 401 interceptor</h3>
+      <pre><code>import axios from 'axios';
+
+export const api = axios.create({
+  baseURL: '/api',
+  withCredentials: true
+});
+
+api.interceptors.response.use(
+  (res) =&gt; res,
+  (err) =&gt; {
+    if (err.response?.status === 401) {
+      localStorage.removeItem('user');
+      window.location.href = '/login';
+    }
+    return Promise.reject(err);
+  }
+);</code></pre>
+
+      <!-- ==================== SECTION 15 ==================== -->
+      <h2 id="s15">15. WebSockets — Backend (Node.js) + Frontend (Vite + React)</h2>
+
+      <p>
+        REST is request/response — the client must poll. A WebSocket keeps one
+        persistent connection open so the <strong>server can push</strong>
+        (chat, live notifications, appointment updates) the moment something
+        happens in MongoDB. <strong>Socket.IO</strong> wraps the WebSocket
+        protocol with rooms, reconnection, and an auth handshake, and ships
+        with a matching client for the Vite app.
+      </p>
+
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Layer</th>
+              <th>Package</th>
+              <th>Role</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Node backend</td>
+              <td><code>socket.io</code></td>
+              <td>
+                Attaches to the same <code>http.Server</code> as Express — one
+                port for API + realtime
+              </td>
+            </tr>
+            <tr>
+              <td>Vite frontend</td>
+              <td><code>socket.io-client</code></td>
+              <td>
+                Opens the socket; proxied by Vite in dev and Nginx in prod
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>install</h3>
+      <pre><code># server
+npm i socket.io
+
+# client
+npm i socket.io-client</code></pre>
+
+      <h3>server/socket.js — Socket.IO attached to Express (CommonJS)</h3>
+      <pre><code>const { Server } = require('socket.io');
+const jwt = require('jsonwebtoken');
+const env = require('./config/env');
+
+let io; // one instance — REST controllers push through it
+
+const initSocket = (httpServer) =&gt; {
+  io = new Server(httpServer, {
+    path: '/socket.io',
+    cors: { origin: env.CLIENT_URL, credentials: true }
+  });
+
+  // handshake auth — the httpOnly token cookie is sent automatically
+  io.use((socket, next) =&gt; {
+    try {
+      const header = socket.handshake.headers.cookie || '';
+      const cookies = Object.fromEntries(
+        header.split(';').map((c) =&gt; c.trim().split('='))
+      );
+      if (!cookies.token) return next(new Error('Not authorized'));
+      socket.data.userId = jwt.verify(cookies.token, env.JWT_SECRET).id;
+      next();
+    } catch (err) {
+      next(new Error('Invalid token'));
+    }
+  });
+
+  io.on('connection', (socket) =&gt; {
+    const userId = socket.data.userId;
+    socket.join(`user:${userId}`); // private room per user
+
+    // scope sockets to a resource (one appointment, one chat thread)
+    socket.on('room:join', (room) =&gt; socket.join(room));
+    socket.on('room:leave', (room) =&gt; socket.leave(room));
+
+    socket.on('disconnect', () =&gt; {
+      console.log('ws closed:', userId);
+    });
+  });
+
+  return io;
+};
+
+// helpers reused by REST controllers (push right after a DB write)
+const emitToUser = (userId, event, payload) =&gt;
+  io &amp;&amp; io.to(`user:${userId}`).emit(event, payload);
+
+const emitToRoom = (room, event, payload) =&gt;
+  io &amp;&amp; io.to(room).emit(event, payload);
+
+const getIO = () =&gt; io;
+
+module.exports = { initSocket, emitToUser, emitToRoom, getIO };</code></pre>
+
+      <div class="callout">
+        <strong>Why a singleton?</strong> Controllers are required before the
+        server boots, so they import <code>emitToUser</code> from this module
+        instead of receiving <code>io</code> as a parameter —
+        <code>initSocket(server)</code> fills the module-level
+        <code>io</code> once at startup.
+      </div>
+
+      <h3>server.js — create the http server instead of app.listen()</h3>
+      <pre><code>const http = require('http');
+const { initSocket, getIO } = require('./socket');
+
+const start = async () =&gt; {
+  try {
+    await connectDB();
+
+    const server = http.createServer(app); // Express still owns every /api route
+    initSocket(server);                    // realtime shares the SAME port
+    server.listen(env.PORT, () =&gt;
+      logger.info(`API + WS on ${env.PORT}`)
+    );
+
+    const shutdown = async (signal) =&gt; {
+      logger.info(`${signal} received, shutting down...`);
+      server.close(async () =&gt; {
+        if (getIO()) getIO().close();
+        await mongoose.connection.close();
+        process.exit(0);
+      });
+      setTimeout(() =&gt; process.exit(1), 10000).unref();
+    };
+    process.on('SIGINT', () =&gt; shutdown('SIGINT'));
+    process.on('SIGTERM', () =&gt; shutdown('SIGTERM'));
+  } catch (err) {
+    logger.error(err.message);
+    process.exit(1);
+  }
+};
+
+start();</code></pre>
+
+      <div class="callout">
+        <strong>Diff vs Section 4:</strong> only the listener changes —
+        <code>http.createServer(app)</code> replaces
+        <code>app.listen(...)</code>. Middleware, routes, and
+        <code>app.use(notFound/errorHandler)</code> stay untouched; upgrade
+        requests for <code>/socket.io</code> never reach Express.
+      </div>
+
+      <h3>push from a REST controller (after the Mongo write)</h3>
+      <pre><code>const Appointment = require('../models/Appointment');
+const asyncHandler = require('../middleware/asyncHandler');
+const { created } = require('../utils/apiResponse');
+const { emitToUser } = require('../socket');
+
+// @desc  create appointment   POST /api/appointments
+exports.createAppointment = asyncHandler(async (req, res) =&gt; {
+  const appointment = await Appointment.create({ ...req.body, user: req.user._id });
+
+  emitToUser(req.user._id, 'appointment:created', {
+    _id: appointment._id,
+    date: appointment.date
+  });
+
+  created(res, appointment);
+});</code></pre>
+
+      <h3>event contract (name it once, use it everywhere)</h3>
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Event</th>
+              <th>Direction</th>
+              <th>Payload</th>
+              <th>When</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>room:join</code> / <code>room:leave</code></td>
+              <td>client → server</td>
+              <td><code>'appointment:&lt;id&gt;'</code></td>
+              <td>User opens a detail page</td>
+            </tr>
+            <tr>
+              <td><code>appointment:created</code></td>
+              <td>server → client</td>
+              <td><code>{ _id, date }</code></td>
+              <td>POST /api/appointments succeeded</td>
+            </tr>
+            <tr>
+              <td><code>notification:new</code></td>
+              <td>server → client</td>
+              <td><code>{ title, body }</code></td>
+              <td>Any server-side event worth showing</td>
+            </tr>
+            <tr>
+              <td><code>presence:status</code></td>
+              <td>server → client</td>
+              <td><code>{ userId, status }</code></td>
+              <td>User connects / disconnects</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>vite.config.js — proxy the socket in dev (ws: true)</h3>
+      <pre><code>import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+
+export default defineConfig({
+  plugins: [react()],
+  server: {
+    port: 5173,
+    proxy: {
+      '/api': {
+        target: 'http://localhost:5000',
+        changeOrigin: true
+      },
+      '/socket.io': {
+        target: 'http://localhost:5000',
+        ws: true,          // forward the HTTP Upgrade handshake
+        changeOrigin: true
+      }
+    }
+  }
+});</code></pre>
+
+      <h3>client — src/features/realtime/socket.js (singleton)</h3>
+      <pre><code>import { io } from 'socket.io-client';
+
+let socket = null;
+
+// same-origin '/' → Vite proxy in dev, Nginx in prod; auth cookie rides along
+export const connectSocket = () =&gt; {
+  if (socket) return socket;
+  socket = io('/', {
+    path: '/socket.io',
+    withCredentials: true,
+    autoConnect: true,
+    reconnection: true,
+    reconnectionAttempts: 10
+  });
+  return socket;
+};
+
+export const disconnectSocket = () =&gt; {
+  if (!socket) return;
+  socket.disconnect();
+  socket = null;
+};
+
+export const getSocket = () =&gt; socket;</code></pre>
+
+      <h3>client — src/hooks/useSocket.js</h3>
+      <pre><code>import { useEffect } from 'react';
+import { connectSocket } from '../features/realtime/socket';
+
+// subscribe to one event for the lifetime of the component
+export default function useSocket(event, handler) {
+  const socket = connectSocket();
+
+  useEffect(() =&gt; {
+    socket.on(event, handler);
+    return () =&gt; socket.off(event, handler);
+  }, [socket, event, handler]);
+
+  return socket;
+}</code></pre>
+
+      <h3>client — src/features/realtime/RealtimeNotifications.jsx</h3>
+      <pre><code>import toast from 'react-hot-toast';
+import useSocket from '../../hooks/useSocket';
+
+// renders nothing — mounted once in Layout.jsx (Section 14)
+export default function RealtimeNotifications() {
+  useSocket('notification:new', (payload) =&gt;
+    toast(payload.title, { body: payload.body })
+  );
+
+  useSocket('appointment:created', (appointment) =&gt;
+    toast.success(`Appointment booked — ${appointment.date}`)
+  );
+
+  return null;
+}</code></pre>
+
+      <pre><code>// src/components/Layout.jsx — mount once, above the Outlet
+import { Outlet } from 'react-router-dom';
+import Navbar from './Navbar';
+import RealtimeNotifications from '../features/realtime/RealtimeNotifications';
+
+export default function Layout() {
+  return (
+    &lt;div className="min-h-screen flex flex-col"&gt;
+      &lt;Navbar /&gt;
+      &lt;RealtimeNotifications /&gt;
+      &lt;main className="flex-1 container-page pt-20 pb-10"&gt;
+        &lt;Outlet /&gt;
+      &lt;/main&gt;
+    &lt;/div&gt;
+  );
+}</code></pre>
+
+      <div class="callout">
+        <strong>Auth lifecycle:</strong> connect after login (the cookie is set
+        by <code>POST /api/auth/login</code>) and call
+        <code>disconnectSocket()</code> in the logout handler of
+        <code>Navbar.jsx</code> (Section 14) — the handshake re-checks the JWT
+        on every connection attempt.
+      </div>
+
+      <h3>RTK Query — update the cache when the server pushes</h3>
+      <pre><code>import { apiSlice } from '../api/apiSlice';
+import { connectSocket } from './socket';
+
+export const appointmentsApiSlice = apiSlice.injectEndpoints({
+  endpoints: (builder) =&gt; ({
+    getAppointments: builder.query({
+      query: () =&gt; '/appointments',
+      providesTags: ['Appointment'],
+      // keep the list live without refetching
+      async onCacheEntryAdded(arg, { updateCachedData, cacheEntryRemoved }) {
+        const socket = connectSocket();
+        const onCreated = (appointment) =&gt;
+          updateCachedData((draft) =&gt; {
+            draft.items.push(appointment);
+          });
+
+        socket.on('appointment:created', onCreated);
+        await cacheEntryRemoved;   // cache evicted / component gone
+        socket.off('appointment:created', onCreated);
+      }
+    })
+  })
+});
+
+export const { useGetAppointmentsQuery } = appointmentsApiSlice;</code></pre>
+
+      <div class="callout">
+        <strong>Two-way sync:</strong> the mutation still invalidates
+        <code>providesTags</code> (Section 13) for everyone already fetching —
+        the socket listener only removes the gap between "row written to
+        Mongo" and "next poll".
+      </div>
+
+      <h3>nginx — proxy WebSockets in production</h3>
+      <pre><code>location /socket.io/ {
+    proxy_pass http://127.0.0.1:5000/socket.io/;
+    proxy_http_version 1.1;
+    proxy_set_header Upgrade $http_upgrade;
+    proxy_set_header Connection "upgrade";
+    proxy_set_header Host $host;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_read_timeout 60s;      # keep idle sockets alive
+}</code></pre>
+
+      <div class="callout">
+        <strong>Scale note:</strong> one PM2 process holds its own sockets —
+        when you run several instances, share events across them with
+        <code>@socket.io/redis-adapter</code> (a Redis pub/sub channel), or
+        sticky sessions at the load balancer. Local dev and a single
+        <code>pm2</code> process need neither.
+      </div>
+    </main>
+
+    <script src="../js/main.js"></script>
+  </body>
+</html>

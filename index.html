@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MERN Boilerplate Reference</title>
+    <link rel="stylesheet" href="css/styles.css" />
+  </head>
+  <body>
+    <button class="menu-toggle" id="menuToggle" aria-label="Toggle navigation">
+      ☰
+    </button>
+    <div class="overlay" id="overlay"></div>
+
+    <nav class="sidebar" id="sidebar">
+      <h2>MERN Reference</h2>
+      <div class="search-wrap">
+        <div class="search-field">
+          <input
+            type="search"
+            id="navSearch"
+            class="nav-search"
+            placeholder="Search sections…"
+            autocomplete="off"
+            aria-label="Search sections"
+          />
+        </div>
+        <span id="searchCount" class="search-count"></span>
+      </div>
+      <ul id="navList">
+        <li><a href="reference/reference.html#s1">1. Environment Setup</a></li>
+        <li><a href="reference/reference.html#s2">2. Folder Structure Diagram</a></li>
+        <li><a href="backend/backend.html#s3">3. Backend Init</a></li>
+        <li><a href="backend/backend.html#s4">4. Express Server</a></li>
+        <li><a href="backend/backend.html#s5">5. Middlewares</a></li>
+        <li><a href="backend/backend.html#s6">6. MongoDB + Mongoose</a></li>
+        <li><a href="backend/backend.html#s7">7. Models / Controllers / Routes</a></li>
+        <li><a href="backend/backend.html#s8">8. Validation &amp; Pagination</a></li>
+        <li><a href="backend/backend.html#s9">9. Auth Deep-Dive (JWT + Cookies)</a></li>
+        <li><a href="frontend/frontend.html#s10">10. Frontend Init</a></li>
+        <li><a href="frontend/frontend.html#s11">11. Tailwind Setup</a></li>
+        <li><a href="frontend/frontend.html#s12">12. Redux Toolkit (Counter)</a></li>
+        <li><a href="frontend/frontend.html#s13">13. RTK Query + Injection</a></li>
+        <li><a href="frontend/frontend.html#s14">14. React Boilerplate</a></li>
+        <li><a href="frontend/frontend.html#s15">15. WebSockets (Socket.IO)</a></li>
+        <li><a href="devops/devops.html#s16">16. Dev Workflow</a></li>
+        <li>
+          <a href="devops/devops.html#s17">17. Testing (Jest + Supertest / Vitest)</a>
+          <ul>
+            <li><a href="devops/devops.html#s17a">A. API — Jest + Supertest</a></li>
+            <li><a href="devops/devops.html#s17b">B. UI — Vitest + RTL</a></li>
+          </ul>
+        </li>
+        <li>
+          <a href="reference/reference.html#s18">18. TypeScript Setup + Commands</a>
+          <ul>
+            <li><a href="reference/reference.html#s18a">A. Node / Express (CommonJS)</a></li>
+            <li><a href="reference/reference.html#s18b">B. Vite (React / Vue)</a></li>
+          </ul>
+        </li>
+        <li><a href="devops/devops.html#s19">19. CI/CD + Docs</a></li>
+        <li><a href="devops/devops.html#s20">20. Docker Setup</a></li>
+        <li><a href="devops/devops.html#s21">21. VPS + Nginx + SSL</a></li>
+        <li><a href="devops/devops.html#s22">22. SSL &amp; Certificate Authority (CA)</a></li>
+        <li><a href="reference/reference.html#s23">23. Commands Cheat Sheet</a></li>
+        <li><a href="reference/reference.html#s24">24. Ubuntu Commands Cheat Sheet</a></li>
+        <li><a href="reference/reference.html#s25">25. Git &amp; GitHub</a></li>
+      </ul>
+      <p id="searchEmpty" class="search-empty" hidden>No sections match.</p>
+      <p class="sidebar-home"><a href="index.html">⌂ back to index</a></p>
+    </nav>
+
+    <main class="main-content">
+      <h1>MERN Boilerplate Reference</h1>
+      <p class="subtitle">Copy-paste snippets — Vite + RTK + RTK Query + Express + MongoDB + Tailwind + Docker. Pick a section below or search in the sidebar.</p>
+
+      <div class="callout">
+        <strong>How this project is split:</strong> this file is the hub —
+        every entry below and in the sidebar deep-links straight to its
+        section page. Styles live in <code>css/styles.css</code>, behaviour
+        (search / scrollspy / copy buttons) in <code>js/main.js</code>; the
+        four section pages share both. After any edit, run
+        <code>node verify.js</code> to re-check every link, anchor and code
+        block.
+      </div>
+
+      <h2>Setup &amp; Reference</h2>
+      <p><a href="reference/reference.html"><code>reference/reference.html</code></a> — 6 sections</p>
+      <ul>
+        <li><a href="reference/reference.html#s1">1. Environment Setup</a> — node/npm, .nvmrc, .gitignore, .env templates</li>
+        <li><a href="reference/reference.html#s2">2. Folder Structure Diagram</a> — full mern-app tree + the four concepts</li>
+        <li><a href="reference/reference.html#s18">18. TypeScript Setup + Commands</a> — Type A Node/Express, Type B Vite</li>
+        <li><a href="reference/reference.html#s23">23. Commands Cheat Sheet</a> — npm, Mongo, Git, Docker, PM2, curl</li>
+        <li><a href="reference/reference.html#s24">24. Ubuntu Commands Cheat Sheet</a> — apt, systemd, ufw, ssh, cron</li>
+        <li><a href="reference/reference.html#s25">25. Git &amp; GitHub</a> — daily loop, branches, PRs, gh CLI</li>
+      </ul>
+
+      <h2>Backend — Express + MongoDB</h2>
+      <p><a href="backend/backend.html"><code>backend/backend.html</code></a> — 7 sections</p>
+      <ul>
+        <li><a href="backend/backend.html#s3">3. Backend Init</a> — npm init, deps, scripts, backend skeleton</li>
+        <li><a href="backend/backend.html#s4">4. Express Server</a> — server.js, db.js, config/env.js, graceful shutdown</li>
+        <li><a href="backend/backend.html#s5">5. Middlewares</a> — protect, admin, errors, rate limit + config table</li>
+        <li><a href="backend/backend.html#s6">6. MongoDB + Mongoose</a> — local/Atlas URIs, options, seed.js</li>
+        <li><a href="backend/backend.html#s7">7. Models / Controllers / Routes</a> — User model, CRUD, apiResponse, paginate</li>
+        <li><a href="backend/backend.html#s8">8. Validation &amp; Pagination</a> — express-validator, zod env, response envelope</li>
+        <li><a href="backend/backend.html#s9">9. Auth Deep-Dive (JWT + Cookies)</a> — access + refresh tokens, rotation</li>
+      </ul>
+
+      <h2>Frontend — Vite + React</h2>
+      <p><a href="frontend/frontend.html"><code>frontend/frontend.html</code></a> — 6 sections</p>
+      <ul>
+        <li><a href="frontend/frontend.html#s10">10. Frontend Init</a> — create vite (client/ or current folder), dev proxy</li>
+        <li><a href="frontend/frontend.html#s11">11. Tailwind Setup</a> — config, index.css, btn/card/input components</li>
+        <li><a href="frontend/frontend.html#s12">12. Redux Toolkit (Counter)</a> — store, slice, Provider wiring</li>
+        <li><a href="frontend/frontend.html#s13">13. RTK Query + Injection</a> — base API, 401 reauth, endpoint slices</li>
+        <li><a href="frontend/frontend.html#s14">14. React Boilerplate</a> — layout routes, guards, Navbar, pages, axios</li>
+        <li><a href="frontend/frontend.html#s15">15. WebSockets (Socket.IO)</a> — backend socket.js + useSocket hook + proxies</li>
+      </ul>
+
+      <h2>DevOps — Workflow, Testing &amp; Deploy</h2>
+      <p><a href="devops/devops.html"><code>devops/devops.html</code></a> — 6 sections</p>
+      <ul>
+        <li><a href="devops/devops.html#s16">16. Dev Workflow</a> — concurrently root scripts, common ports</li>
+        <li><a href="devops/devops.html#s17">17. Testing (Jest + Supertest / Vitest)</a> — app/server split, API tests, Vitest + RTL UI tests</li>
+        <li><a href="devops/devops.html#s19">19. CI/CD + Docs</a> — GitHub Actions, Swagger, README template</li>
+        <li><a href="devops/devops.html#s20">20. Docker Setup</a> — Dockerfiles, compose, SPA nginx.conf</li>
+        <li><a href="devops/devops.html#s21">21. VPS + Nginx + SSL</a> — pm2, nginx site, certbot, deploy loop</li>
+        <li><a href="devops/devops.html#s22">22. SSL &amp; Certificate Authority (CA)</a> — local CA, self-signed, Lets Encrypt</li>
+      </ul>
+
+      <h2>Project files</h2>
+      <div class="table-wrapper">
+        <table>
+          <thead><tr><th>File</th><th>Role</th></tr></thead>
+          <tbody>
+            <tr><td><code>index.html</code></td><td>This hub — links to every section</td></tr>
+            <tr><td><a href="reference/reference.html"><code>reference/reference.html</code></a></td><td>Sections 1, 2, 18, 23, 24, 25</td></tr>
+            <tr><td><a href="backend/backend.html"><code>backend/backend.html</code></a></td><td>Sections 3, 4, 5, 6, 7, 8, 9</td></tr>
+            <tr><td><a href="frontend/frontend.html"><code>frontend/frontend.html</code></a></td><td>Sections 10, 11, 12, 13, 14, 15</td></tr>
+            <tr><td><a href="devops/devops.html"><code>devops/devops.html</code></a></td><td>Sections 16, 17, 19, 20, 21, 22</td></tr>
+            <tr><td><a href="css/styles.css"><code>css/styles.css</code></a></td><td>Shared styles for every page</td></tr>
+            <tr><td><a href="js/main.js"><code>js/main.js</code></a></td><td>Search, scrollspy, mobile menu, copy buttons</td></tr>
+            <tr><td><a href="AGENTS.md"><code>AGENTS.md</code></a></td><td>Contributor / agent context for this project</td></tr>
+            <tr><td><a href="verify.js"><code>verify.js</code></a></td><td>Optional checker — <code>node verify.js</code> after any edit</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </main>
+
+    <script src="js/main.js"></script>
+  </body>
+</html>

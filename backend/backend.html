@@ -1,0 +1,937 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MERN Reference — Backend</title>
+    <link rel="stylesheet" href="../css/styles.css" />
+  </head>
+  <body>
+    <button class="menu-toggle" id="menuToggle" aria-label="Toggle navigation">
+      ☰
+    </button>
+    <div class="overlay" id="overlay"></div>
+
+    <nav class="sidebar" id="sidebar">
+      <h2>MERN Reference</h2>
+      <div class="search-wrap">
+        <div class="search-field">
+          <input
+            type="search"
+            id="navSearch"
+            class="nav-search"
+            placeholder="Search sections…"
+            autocomplete="off"
+            aria-label="Search sections"
+          />
+        </div>
+        <span id="searchCount" class="search-count"></span>
+      </div>
+      <ul id="navList">
+        <li><a href="../reference/reference.html#s1">1. Environment Setup</a></li>
+        <li><a href="../reference/reference.html#s2">2. Folder Structure Diagram</a></li>
+        <li><a href="../backend/backend.html#s3">3. Backend Init</a></li>
+        <li><a href="../backend/backend.html#s4">4. Express Server</a></li>
+        <li><a href="../backend/backend.html#s5">5. Middlewares</a></li>
+        <li><a href="../backend/backend.html#s6">6. MongoDB + Mongoose</a></li>
+        <li><a href="../backend/backend.html#s7">7. Models / Controllers / Routes</a></li>
+        <li><a href="../backend/backend.html#s8">8. Validation &amp; Pagination</a></li>
+        <li><a href="../backend/backend.html#s9">9. Auth Deep-Dive (JWT + Cookies)</a></li>
+        <li><a href="../frontend/frontend.html#s10">10. Frontend Init</a></li>
+        <li><a href="../frontend/frontend.html#s11">11. Tailwind Setup</a></li>
+        <li><a href="../frontend/frontend.html#s12">12. Redux Toolkit (Counter)</a></li>
+        <li><a href="../frontend/frontend.html#s13">13. RTK Query + Injection</a></li>
+        <li><a href="../frontend/frontend.html#s14">14. React Boilerplate</a></li>
+        <li><a href="../frontend/frontend.html#s15">15. WebSockets (Socket.IO)</a></li>
+        <li><a href="../devops/devops.html#s16">16. Dev Workflow</a></li>
+        <li>
+          <a href="../devops/devops.html#s17">17. Testing (Jest + Supertest / Vitest)</a>
+          <ul>
+            <li><a href="../devops/devops.html#s17a">A. API — Jest + Supertest</a></li>
+            <li><a href="../devops/devops.html#s17b">B. UI — Vitest + RTL</a></li>
+          </ul>
+        </li>
+        <li>
+          <a href="../reference/reference.html#s18">18. TypeScript Setup + Commands</a>
+          <ul>
+            <li><a href="../reference/reference.html#s18a">A. Node / Express (CommonJS)</a></li>
+            <li><a href="../reference/reference.html#s18b">B. Vite (React / Vue)</a></li>
+          </ul>
+        </li>
+        <li><a href="../devops/devops.html#s19">19. CI/CD + Docs</a></li>
+        <li><a href="../devops/devops.html#s20">20. Docker Setup</a></li>
+        <li><a href="../devops/devops.html#s21">21. VPS + Nginx + SSL</a></li>
+        <li><a href="../devops/devops.html#s22">22. SSL &amp; Certificate Authority (CA)</a></li>
+        <li><a href="../reference/reference.html#s23">23. Commands Cheat Sheet</a></li>
+        <li><a href="../reference/reference.html#s24">24. Ubuntu Commands Cheat Sheet</a></li>
+        <li><a href="../reference/reference.html#s25">25. Git &amp; GitHub</a></li>
+      </ul>
+      <p id="searchEmpty" class="search-empty" hidden>No sections match.</p>
+      <p class="sidebar-home"><a href="../index.html">⌂ back to index</a></p>
+    </nav>
+
+    <main class="main-content">
+      <h1>Backend — Express + MongoDB</h1>
+      <p class="subtitle">Sections 3–9 — Node.js/Express API: init, server, middlewares, database, routes, validation, auth.</p>
+
+      <!-- ==================== SECTION 3 ==================== -->
+      <h2 id="s3">3. Backend — Node.js + Express Initialization</h2>
+
+      <h3>init</h3>
+      <pre><code>mkdir server &amp;&amp; cd server
+npm init -y</code></pre>
+
+      <h3>install deps</h3>
+      <pre><code>npm i express mongoose dotenv cors bcryptjs jsonwebtoken cookie-parser helmet hpp compression express-mongo-sanitize morgan express-rate-limit express-validator swagger-jsdoc swagger-ui-express
+npm i -D nodemon jest supertest</code></pre>
+
+      <h3>package.json scripts</h3>
+      <pre><code>{
+  "scripts": {
+    "dev": "nodemon server.js",
+    "start": "node server.js",
+    "seed": "node seed.js"
+  }
+}</code></pre>
+
+      <h3>backend folder structure</h3>
+      <pre><code>server/
+├─ server.js
+├─ app.js            (export app for tests)
+├─ db.js
+├─ seed.js
+├─ config/
+│  └─ env.js
+├─ middleware/
+│  ├─ authMiddleware.js
+│  ├─ adminMiddleware.js
+│  ├─ errorMiddleware.js
+│  ├─ notFoundMiddleware.js
+│  ├─ rateLimitMiddleware.js
+│  └─ asyncHandler.js
+├─ utils/
+│  ├─ apiResponse.js
+│  ├─ paginate.js
+│  ├─ logger.js
+│  └─ swagger.js
+├─ models/
+│  └─ User.js
+├─ controllers/
+│  ├─ userController.js
+│  ├─ authController.js
+│  └─ tokenController.js
+├─ validation/
+│  └─ auth.js
+├─ routes/
+│  ├─ userRoutes.js
+│  └─ authRoutes.js
+└─ tests/
+   └─ auth.test.js</code></pre>
+
+      <!-- ==================== SECTION 4 ==================== -->
+      <h2 id="s4">4. Backend — Express Server Boilerplate</h2>
+
+      <h3>install</h3>
+      <pre><code>npm i express mongoose dotenv cookie-parser cors helmet hpp compression express-mongo-sanitize morgan swagger-ui-express</code></pre>
+
+      <h3>server.js</h3>
+      <pre><code>const express = require('express');
+const mongoose = require('mongoose');
+const cookieParser = require('cookie-parser');
+const cors = require('cors');
+const helmet = require('helmet');
+const hpp = require('hpp');
+const compression = require('compression');
+const mongoSanitize = require('express-mongo-sanitize');
+const morgan = require('morgan');
+const swaggerUi = require('swagger-ui-express');
+require('dotenv').config();
+
+const connectDB = require('./db');
+const env = require('./config/env');
+const logger = require('./utils/logger');
+const specs = require('./utils/swagger');
+const apiLimiter = require('./middleware/rateLimitMiddleware');
+const authRoutes = require('./routes/authRoutes');
+const userRoutes = require('./routes/userRoutes');
+const notFound = require('./middleware/notFoundMiddleware');
+const errorHandler = require('./middleware/errorMiddleware');
+
+const app = express();
+
+// security &amp; parsing
+app.use(helmet());
+app.use(cors({ origin: env.CLIENT_URL, credentials: true }));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
+app.use(mongoSanitize());
+app.use(hpp());
+app.use(compression());
+app.use(morgan(env.NODE_ENV === 'production' ? 'combined' : 'dev'));
+
+// rate limiter as middleware (applies to every /api/* request)
+app.use('/api', apiLimiter);
+
+// routes
+app.use('/api/auth', authRoutes);
+app.use('/api/users', userRoutes);
+app.get('/api/health', (req, res) =&gt; res.json({ status: 'ok' }));
+
+// api docs
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
+
+// 404 + error
+app.use(notFound);
+app.use(errorHandler);
+
+const start = async () =&gt; {
+  try {
+    await connectDB();
+    const server = app.listen(env.PORT, () =&gt;
+      logger.info(`API on ${env.PORT}`)
+    );
+
+    // graceful shutdown
+    const shutdown = async (signal) =&gt; {
+      logger.info(`${signal} received, shutting down...`);
+      server.close(async () =&gt; {
+        await mongoose.connection.close();
+        process.exit(0);
+      });
+      setTimeout(() =&gt; process.exit(1), 10000).unref();
+    };
+    process.on('SIGINT', () =&gt; shutdown('SIGINT'));
+    process.on('SIGTERM', () =&gt; shutdown('SIGTERM'));
+  } catch (err) {
+    logger.error(err.message);
+    process.exit(1);
+  }
+};
+
+start();</code></pre>
+
+      <div class="callout">
+        <strong>Tip:</strong> For testability, extract the Express app to
+        <code>app.js</code> (everything above <code>start()</code>) and
+        <code>module.exports = app;</code>. Then <code>server.js</code> only
+        imports it and runs <code>start()</code>. This is what the Jest tests in
+        Section 17 use.
+      </div>
+
+      <h3>db.js</h3>
+      <pre><code>const mongoose = require('mongoose');
+const env = require('./config/env');
+
+const connectDB = async () =&gt; {
+  try {
+    const conn = await mongoose.connect(env.MONGO_URI, {
+      retryWrites: true,
+      w: 'majority'
+    });
+    console.log(`Mongo connected: ${conn.connection.host}`);
+  } catch (err) {
+    console.error(err.message);
+    process.exit(1);
+  }
+};
+
+module.exports = connectDB;</code></pre>
+
+      <h3>config/env.js</h3>
+      <pre><code>const required = ['MONGO_URI', 'JWT_SECRET', 'CLIENT_URL'];
+
+required.forEach((key) =&gt; {
+  if (!process.env[key]) {
+    console.error(`Missing env: ${key}`);
+    process.exit(1);
+  }
+});
+
+module.exports = {
+  NODE_ENV: process.env.NODE_ENV || 'development',
+  PORT: process.env.PORT || 5000,
+  MONGO_URI: process.env.MONGO_URI,
+  JWT_SECRET: process.env.JWT_SECRET,
+  JWT_EXPIRES_IN: process.env.JWT_EXPIRES_IN || '15m',
+  REFRESH_SECRET: process.env.REFRESH_SECRET || process.env.JWT_SECRET,
+  REFRESH_EXPIRES_IN: process.env.REFRESH_EXPIRES_IN || '30d',
+  CLIENT_URL: process.env.CLIENT_URL
+};</code></pre>
+
+      <div class="callout">
+        <strong>Note:</strong> A stricter <code>zod</code>-based env schema
+        lives in Section 8 — use it instead of the manual check if you prefer
+        fail-fast typed config.
+      </div>
+
+      <!-- ==================== SECTION 5 ==================== -->
+      <h2 id="s5">5. Backend — Common Middlewares</h2>
+
+      <h3>install</h3>
+      <pre><code>npm i jsonwebtoken express-rate-limit</code></pre>
+
+      <h3>middleware/asyncHandler.js</h3>
+      <pre><code>const asyncHandler = (fn) =&gt; (req, res, next) =&gt;
+  Promise.resolve(fn(req, res, next)).catch(next);
+
+module.exports = asyncHandler;</code></pre>
+
+      <h3>middleware/authMiddleware.js</h3>
+      <pre><code>const jwt = require('jsonwebtoken');
+const User = require('../models/User');
+const env = require('../config/env');
+const asyncHandler = require('./asyncHandler');
+
+const protect = asyncHandler(async (req, res, next) =&gt; {
+  const token = req.cookies.token || req.headers.authorization?.split(' ')[1];
+  if (!token) {
+    res.status(401);
+    throw new Error('Not authorized');
+  }
+  const decoded = jwt.verify(token, env.JWT_SECRET);
+  req.user = await User.findById(decoded.id).select('-password');
+  if (!req.user) {
+    res.status(401);
+    throw new Error('User not found');
+  }
+  next();
+});
+
+module.exports = { protect };</code></pre>
+
+      <h3>middleware/adminMiddleware.js</h3>
+      <pre><code>const admin = (req, res, next) =&gt; {
+  if (req.user &amp;&amp; req.user.role === 'admin') return next();
+  res.status(403);
+  throw new Error('Admin only');
+};
+
+module.exports = { admin };</code></pre>
+
+      <h3>middleware/errorMiddleware.js</h3>
+      <pre><code>const errorHandler = (err, req, res, next) =&gt; {
+  let status = res.statusCode === 200 ? 500 : res.statusCode;
+  let message = err.message || 'Server error';
+
+  if (err.name === 'CastError' &amp;&amp; err.kind === 'ObjectId') {
+    status = 404;
+    message = 'Resource not found';
+  }
+
+  if (err.code === 11000) {
+    status = 400;
+    message = 'Duplicate value entered';
+  }
+
+  res.status(status).json({
+    success: false,
+    message,
+    stack: process.env.NODE_ENV === 'production' ? undefined : err.stack
+  });
+};
+
+module.exports = errorHandler;</code></pre>
+
+      <h3>middleware/notFoundMiddleware.js</h3>
+      <pre><code>const notFound = (req, res, next) =&gt; {
+  res.status(404);
+  next(new Error(`Not found - ${req.originalUrl}`));
+};
+
+module.exports = notFound;</code></pre>
+
+      <h3>middleware/rateLimitMiddleware.js</h3>
+      <pre><code>const rateLimit = require('express-rate-limit');
+
+const apiLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 min
+  max: 300,                 // max requests per window per IP
+  standardHeaders: true,    // return RateLimit-* headers
+  legacyHeaders: false,     // disable X-RateLimit-* headers
+  message: {
+    success: false,
+    message: 'Too many requests, please try again later'
+  }
+});
+
+module.exports = apiLimiter;</code></pre>
+
+      <div class="callout">
+        <strong>Note:</strong> Mount it once in <code>server.js</code> with
+        <code>app.use('/api', apiLimiter)</code> — it applies to every
+        <code>/api/*</code> route as middleware, not inline.
+      </div>
+
+      <h3>every middleware used in server.js — at a glance</h3>
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Middleware</th>
+              <th>Source</th>
+              <th>Purpose</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>helmet()</code></td>
+              <td>helmet</td>
+              <td>Security headers (CSP, HSTS, X-Frame-Options…)</td>
+            </tr>
+            <tr>
+              <td><code>cors()</code></td>
+              <td>cors</td>
+              <td>Allow <code>CLIENT_URL</code> origin + credentials cookie</td>
+            </tr>
+            <tr>
+              <td><code>express.json()</code></td>
+              <td>express</td>
+              <td>Parse JSON request bodies</td>
+            </tr>
+            <tr>
+              <td><code>express.urlencoded()</code></td>
+              <td>express</td>
+              <td>Parse form URL-encoded bodies</td>
+            </tr>
+            <tr>
+              <td><code>cookieParser()</code></td>
+              <td>cookie-parser</td>
+              <td>Parse the httpOnly auth cookies</td>
+            </tr>
+            <tr>
+              <td><code>mongoSanitize()</code></td>
+              <td>express-mongo-sanitize</td>
+              <td>Strip <code>$</code> operators — blocks NoSQL injection</td>
+            </tr>
+            <tr>
+              <td><code>hpp()</code></td>
+              <td>hpp</td>
+              <td>
+                Reject duplicate query params — blocks HTTP parameter pollution
+              </td>
+            </tr>
+            <tr>
+              <td><code>compression()</code></td>
+              <td>compression</td>
+              <td>Gzip responses</td>
+            </tr>
+            <tr>
+              <td><code>morgan(...)</code></td>
+              <td>morgan</td>
+              <td>
+                Request logging (<code>combined</code> in prod,
+                <code>dev</code> in dev)
+              </td>
+            </tr>
+            <tr>
+              <td><code>apiLimiter</code></td>
+              <td><code>middleware/rateLimitMiddleware.js</code></td>
+              <td>Rate limit <code>/api/*</code> per IP (above)</td>
+            </tr>
+            <tr>
+              <td><code>swaggerUi.serve</code></td>
+              <td>swagger-ui-express</td>
+              <td>Serve the <code>/api-docs</code> UI</td>
+            </tr>
+            <tr>
+              <td><code>notFound</code></td>
+              <td><code>middleware/notFoundMiddleware.js</code></td>
+              <td>404 for unknown routes (above)</td>
+            </tr>
+            <tr>
+              <td><code>errorHandler</code></td>
+              <td><code>middleware/errorMiddleware.js</code></td>
+              <td>Central error response (above)</td>
+            </tr>
+            <tr>
+              <td><code>protect</code> / <code>admin</code></td>
+              <td>route-level (above)</td>
+              <td>Auth + role guard applied per route</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>third-party app-level middleware — config used in server.js</h3>
+      <pre><code>const helmet = require('helmet');
+const cors = require('cors');
+const mongoSanitize = require('express-mongo-sanitize');
+const hpp = require('hpp');
+const compression = require('compression');
+
+app.use(helmet());                                // secure HTTP headers
+app.use(cors({ origin: env.CLIENT_URL, credentials: true })); // single origin + cookies
+app.use(express.json());                          // JSON bodies
+app.use(express.urlencoded({ extended: true }));  // form bodies
+app.use(cookieParser());                          // req.cookies.token etc.
+app.use(mongoSanitize());                         // blocks $ne / $gt / $where injection
+app.use(hpp());                                   // blocks ?id=1&amp;id=2 pollution
+app.use(compression());                           // gzip responses
+app.use(morgan(env.NODE_ENV === 'production' ? 'combined' : 'dev'));</code></pre>
+
+      <pre><code>// optional strict CSP for production — tune directives to your app
+app.use(
+  helmet({
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'"],
+        scriptSrc: ["'self'"],
+        styleSrc: ["'self'", "'unsafe-inline'"]
+      }
+    }
+  })
+);</code></pre>
+
+      <div class="callout">
+        <strong>Order matters:</strong> security + parsing middleware run before
+        <code>apiLimiter</code>, routes, then <code>notFound</code> and finally
+        <code>errorHandler</code>. Custom route guards
+        (<code>protect</code>/<code>admin</code>) go per-route in
+        <code>routes/*.js</code>.
+      </div>
+
+      <!-- ==================== SECTION 6 ==================== -->
+      <h2 id="s6">6. Database — MongoDB + Mongoose</h2>
+
+      <h3>install</h3>
+      <pre><code>npm i mongoose bcryptjs dotenv</code></pre>
+
+      <h3>local connection string</h3>
+      <pre><code>MONGO_URI=mongodb://127.0.0.1:27017/mernapp</code></pre>
+
+      <h3>atlas connection string</h3>
+      <pre><code>MONGO_URI=mongodb+srv://&lt;user&gt;:&lt;pass&gt;@cluster0.xxxxx.mongodb.net/mernapp?retryWrites=true&amp;w=majority</code></pre>
+
+      <h3>connection options</h3>
+      <pre><code>mongoose.connect(env.MONGO_URI, {
+  retryWrites: true,
+  w: 'majority',
+  serverSelectionTimeoutMS: 5000
+});</code></pre>
+
+      <h3>seed.js</h3>
+      <pre><code>const mongoose = require('mongoose');
+const bcrypt = require('bcryptjs');
+const User = require('./models/User');
+const env = require('./config/env');
+require('dotenv').config();
+
+(async () =&gt; {
+  await mongoose.connect(env.MONGO_URI, { serverSelectionTimeoutMS: 5000 });
+  await User.deleteMany();
+  await User.create({
+    name: 'Admin',
+    email: 'admin@example.com',
+    password: 'admin123',
+    role: 'admin'
+  });
+  console.log('Seeded');
+  process.exit();
+})();</code></pre>
+
+      <!-- ==================== SECTION 7 ==================== -->
+      <h2 id="s7">7. Backend — Models, Controllers, Routes</h2>
+
+      <h3>install</h3>
+      <pre><code>npm i mongoose bcryptjs express jsonwebtoken</code></pre>
+
+      <h3>models/User.js</h3>
+      <pre><code>const mongoose = require('mongoose');
+const bcrypt = require('bcryptjs');
+
+const userSchema = new mongoose.Schema(
+  {
+    name: { type: String, required: true, trim: true },
+    email: { type: String, required: true, unique: true, lowercase: true },
+    password: { type: String, required: true, minlength: 6 },
+    role: { type: String, enum: ['user', 'admin'], default: 'user' }
+  },
+  { timestamps: true }
+);
+
+userSchema.pre('save', async function (next) {
+  if (!this.isModified('password')) return next();
+  const salt = await bcrypt.genSalt(10);
+  this.password = await bcrypt.hash(this.password, salt);
+  next();
+});
+
+userSchema.methods.matchPassword = function (entered) {
+  return bcrypt.compare(entered, this.password);
+};
+
+module.exports = mongoose.model('User', userSchema);</code></pre>
+
+      <h3>utils/apiResponse.js</h3>
+      <pre><code>// unified response shape: { success, data, message }
+const ok = (res, data, message = 'OK') =&gt;
+  res.json({ success: true, data, message });
+
+const created = (res, data, message = 'Created') =&gt;
+  res.status(201).json({ success: true, data, message });
+
+module.exports = { ok, created };</code></pre>
+
+      <h3>utils/paginate.js</h3>
+      <pre><code>const paginate = (page = 1, limit = 10) =&gt; {
+  const safePage = Math.max(parseInt(page, 10) || 1, 1);
+  const safeLimit = Math.min(Math.max(parseInt(limit, 10) || 10, 1), 100);
+  return { skip: (safePage - 1) * safeLimit, limit: safeLimit, page: safePage };
+};
+
+const paginatedResult = (items, count, page, limit) =&gt; ({
+  items,
+  pagination: { page, limit, total: count, pages: Math.ceil(count / limit) }
+});
+
+module.exports = { paginate, paginatedResult };</code></pre>
+
+      <h3>utils/logger.js</h3>
+      <pre><code>// minimal structured logger — swap for pino/winston when you need transports
+const logger = {
+  info: (...args) =&gt; console.log('[info]', ...args),
+  warn: (...args) =&gt; console.warn('[warn]', ...args),
+  error: (...args) =&gt; console.error('[error]', ...args)
+};
+
+module.exports = logger;</code></pre>
+
+      <h3>controllers/userController.js</h3>
+      <pre><code>const User = require('../models/User');
+const asyncHandler = require('../middleware/asyncHandler');
+const { ok, created } = require('../utils/apiResponse');
+const { paginate, paginatedResult } = require('../utils/paginate');
+
+// @desc  list users (paginated)   GET /api/users?page=1&amp;limit=10
+exports.getUsers = asyncHandler(async (req, res) =&gt; {
+  const { skip, limit, page } = paginate(req.query.page, req.query.limit);
+  const [items, count] = await Promise.all([
+    User.find().select('-password').skip(skip).limit(limit).lean(),
+    User.countDocuments()
+  ]);
+  ok(res, paginatedResult(items, count, page, limit));
+});
+
+// @desc  single user
+exports.getUserById = asyncHandler(async (req, res) =&gt; {
+  const user = await User.findById(req.params.id).select('-password').lean();
+  if (!user) {
+    res.status(404);
+    throw new Error('User not found');
+  }
+  ok(res, user);
+});
+
+// @desc  create
+exports.createUser = asyncHandler(async (req, res) =&gt; {
+  const user = await User.create(req.body);
+  created(res, { _id: user._id, name: user.name, email: user.email });
+});
+
+// @desc  update
+exports.updateUser = asyncHandler(async (req, res) =&gt; {
+  const user = await User.findByIdAndUpdate(req.params.id, req.body, {
+    new: true,
+    runValidators: true
+  }).select('-password');
+  if (!user) {
+    res.status(404);
+    throw new Error('User not found');
+  }
+  ok(res, user);
+});
+
+// @desc  delete
+exports.deleteUser = asyncHandler(async (req, res) =&gt; {
+  const user = await User.findByIdAndDelete(req.params.id);
+  if (!user) {
+    res.status(404);
+    throw new Error('User not found');
+  }
+  ok(res, null, 'User removed');
+});</code></pre>
+
+      <h3>controllers/authController.js</h3>
+      <pre><code>const User = require('../models/User');
+const jwt = require('jsonwebtoken');
+const env = require('../config/env');
+const asyncHandler = require('../middleware/asyncHandler');
+const { ok, created } = require('../utils/apiResponse');
+
+const signToken = (id) =&gt;
+  jwt.sign({ id }, env.JWT_SECRET, { expiresIn: env.JWT_EXPIRES_IN });
+
+const setCookie = (res, token) =&gt;
+  res.cookie('token', token, {
+    httpOnly: true,
+    secure: env.NODE_ENV === 'production',
+    sameSite: 'lax',
+    maxAge: 15 * 60 * 1000 // matches JWT_EXPIRES_IN
+  });
+
+// @desc  register   POST /api/auth/register
+exports.register = asyncHandler(async (req, res) =&gt; {
+  const { name, email, password } = req.body;
+  const user = await User.create({ name, email, password });
+  const token = signToken(user._id);
+  setCookie(res, token);
+  created(res, { _id: user._id, name, email, role: user.role }, 'Registered');
+});
+
+// @desc  login      POST /api/auth/login
+exports.login = asyncHandler(async (req, res) =&gt; {
+  const { email, password } = req.body;
+  const user = await User.findOne({ email });
+  if (!user || !(await user.matchPassword(password))) {
+    res.status(401);
+    throw new Error('Invalid credentials');
+  }
+  const token = signToken(user._id);
+  setCookie(res, token);
+  ok(res, { _id: user._id, name: user.name, email: user.email, role: user.role }, 'Logged in');
+});
+
+// @desc  logout     POST /api/auth/logout
+exports.logout = asyncHandler(async (req, res) =&gt; {
+  res.clearCookie('token');
+  ok(res, null, 'Logged out');
+});
+
+// @desc  current user  GET /api/auth/me
+exports.getMe = asyncHandler(async (req, res) =&gt; {
+  const user = await User.findById(req.user._id).select('-password').lean();
+  ok(res, user);
+});</code></pre>
+
+      <h3>routes/authRoutes.js</h3>
+      <pre><code>const express = require('express');
+const router = express.Router();
+const { register, login, logout, getMe } = require('../controllers/authController');
+const { protect } = require('../middleware/authMiddleware');
+const { registerRules, loginRules, validate } = require('../validation/auth');
+const { refresh } = require('../controllers/tokenController');
+
+router.post('/register', registerRules, validate, register);
+router.post('/login', loginRules, validate, login);
+router.post('/logout', logout);
+router.get('/me', protect, getMe);
+router.post('/refresh', refresh);
+
+module.exports = router;</code></pre>
+
+      <h3>routes/userRoutes.js</h3>
+      <pre><code>const express = require('express');
+const router = express.Router();
+const {
+  getUsers,
+  getUserById,
+  createUser,
+  updateUser,
+  deleteUser
+} = require('../controllers/userController');
+const { protect } = require('../middleware/authMiddleware');
+const { admin } = require('../middleware/adminMiddleware');
+
+router.route('/').get(protect, admin, getUsers).post(createUser);
+router
+  .route('/:id')
+  .get(protect, getUserById)
+  .put(protect, updateUser)
+  .delete(protect, admin, deleteUser);
+
+module.exports = router;</code></pre>
+
+      <h3>mount in server.js</h3>
+      <pre><code>const authRoutes = require('./routes/authRoutes');
+const userRoutes = require('./routes/userRoutes');
+app.use('/api/auth', authRoutes);
+app.use('/api/users', userRoutes);</code></pre>
+
+      <!-- ==================== SECTION 8 ==================== -->
+      <h2 id="s8">8. Validation, Pagination &amp; Response Format</h2>
+
+      <h3>install</h3>
+      <pre><code>npm i express-validator zod</code></pre>
+
+      <h3>validation/auth.js — express-validator</h3>
+      <pre><code>const { body, validationResult } = require('express-validator');
+
+const registerRules = [
+  body('name').trim().notEmpty().withMessage('Name is required'),
+  body('email').isEmail().normalizeEmail().withMessage('Valid email required'),
+  body('password')
+    .isLength({ min: 6 })
+    .withMessage('Password must be at least 6 characters')
+];
+
+const loginRules = [
+  body('email').isEmail().normalizeEmail().withMessage('Valid email required'),
+  body('password').notEmpty().withMessage('Password is required')
+];
+
+const validate = (req, res, next) =&gt; {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({
+      success: false,
+      message: errors.array().map((e) =&gt; e.msg).join(', ')
+    });
+  }
+  next();
+};
+
+module.exports = { registerRules, loginRules, validate };</code></pre>
+
+      <pre><code>// use in authRoutes.js
+const { registerRules, loginRules, validate } = require('../validation/auth');
+router.post('/register', registerRules, validate, register);
+router.post('/login', loginRules, validate, login);</code></pre>
+
+      <h3>config/env.zod.js — fail-fast typed env (drop-in for env.js)</h3>
+      <pre><code>const { z } = require('zod');
+
+const envSchema = z.object({
+  NODE_ENV: z.enum(['development', 'production', 'test']).default('development'),
+  PORT: z.coerce.number().default(5000),
+  MONGO_URI: z.string().min(1, 'MONGO_URI is required'),
+  JWT_SECRET: z.string().min(16, 'JWT_SECRET must be at least 16 chars'),
+  JWT_EXPIRES_IN: z.string().default('15m'),
+  REFRESH_SECRET: z.string().min(16, 'REFRESH_SECRET must be at least 16 chars'),
+  REFRESH_EXPIRES_IN: z.string().default('30d'),
+  CLIENT_URL: z.string().url()
+});
+
+const parsed = envSchema.safeParse(process.env);
+if (!parsed.success) {
+  console.error(JSON.stringify(parsed.error.format(), null, 2));
+  process.exit(1);
+}
+
+module.exports = parsed.data;</code></pre>
+
+      <h3>unified response shape</h3>
+      <pre><code>// success  → { success: true,  data, message }
+// failure  → { success: false, message }
+GET /api/users?page=2&amp;limit=25
+{
+  "success": true,
+  "message": "OK",
+  "data": {
+    "items": [ ... ],
+    "pagination": { "page": 2, "limit": 25, "total": 87, "pages": 4 }
+  }
+}</code></pre>
+
+      <div class="callout">
+        <strong>Why:</strong> One consistent envelope simplifies the frontend
+        (<code>res.data</code> everywhere), makes errors uniform, and the
+        pagination helper (Section 7) keeps list endpoints generic.
+      </div>
+
+      <!-- ==================== SECTION 9 ==================== -->
+      <h2 id="s9">
+        9. Auth Deep-Dive — JWT Access + Refresh (httpOnly Cookies)
+      </h2>
+
+      <h3>install</h3>
+      <pre><code>npm i jsonwebtoken cookie-parser</code></pre>
+
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Token</th>
+              <th>Lifetime</th>
+              <th>Storage</th>
+              <th>Purpose</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Access (JWT)</td>
+              <td>15m</td>
+              <td>httpOnly cookie <code>token</code></td>
+              <td>Authorizes <code>/api/*</code> requests</td>
+            </tr>
+            <tr>
+              <td>Refresh (JWT)</td>
+              <td>30d</td>
+              <td>httpOnly cookie <code>refreshToken</code></td>
+              <td>
+                Silently mints a new access token at
+                <code>POST /api/auth/refresh</code>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p>
+        Access tokens are short-lived so a stolen token expires fast; the
+        refresh token silently renews the session. Both live in httpOnly
+        cookies, so JavaScript can't read them (XSS-safe).
+      </p>
+
+      <h3>utils/token.js</h3>
+      <pre><code>const jwt = require('jsonwebtoken');
+const env = require('../config/env');
+
+const accessCookie = {
+  httpOnly: true,
+  secure: env.NODE_ENV === 'production',
+  sameSite: 'lax',
+  maxAge: 15 * 60 * 1000
+};
+
+const refreshCookie = {
+  ...accessCookie,
+  maxAge: 30 * 24 * 60 * 60 * 1000
+};
+
+const signAccess = (id) =&gt; jwt.sign({ id }, env.JWT_SECRET, { expiresIn: env.JWT_EXPIRES_IN });
+const signRefresh = (id) =&gt; jwt.sign({ id }, env.REFRESH_SECRET, { expiresIn: env.REFRESH_EXPIRES_IN });
+
+module.exports = { accessCookie, refreshCookie, signAccess, signRefresh };</code></pre>
+
+      <h3>controllers/tokenController.js — refresh + rotate</h3>
+      <pre><code>const jwt = require('jsonwebtoken');
+const User = require('../models/User');
+const env = require('../config/env');
+const asyncHandler = require('../middleware/asyncHandler');
+const { ok } = require('../utils/apiResponse');
+const { accessCookie, refreshCookie, signAccess, signRefresh } = require('../utils/token');
+
+// POST /api/auth/refresh
+exports.refresh = asyncHandler(async (req, res) =&gt; {
+  const refreshToken = req.cookies.refreshToken;
+  if (!refreshToken) {
+    res.status(401);
+    throw new Error('No refresh token');
+  }
+
+  const decoded = jwt.verify(refreshToken, env.REFRESH_SECRET);
+  const user = await User.findById(decoded.id).select('-password');
+  if (!user) {
+    res.status(401);
+    throw new Error('User not found');
+  }
+
+  res.cookie('token', signAccess(user._id), accessCookie);
+  res.cookie('refreshToken', signRefresh(user._id), refreshCookie);
+  ok(res, { _id: user._id, name: user.name, email: user.email, role: user.role }, 'Refreshed');
+});</code></pre>
+
+      <div class="callout">
+        <strong>Security notes:</strong> Mount
+        <code>router.post('/refresh', refresh)</code> in
+        <code>authRoutes.js</code>. The RTK Query
+        <code>baseQueryWithReauth</code> (Section 13) calls this endpoint once
+        on a 401. For rotation-logout, persist a hashed refresh token in Mongo
+        and revoke it on logout; otherwise logout is client-side only.
+      </div>
+    </main>
+
+    <script src="../js/main.js"></script>
+  </body>
+</html>

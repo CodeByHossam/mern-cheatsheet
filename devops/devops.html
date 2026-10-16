@@ -1,0 +1,784 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MERN Reference — DevOps</title>
+    <link rel="stylesheet" href="../css/styles.css" />
+  </head>
+  <body>
+    <button class="menu-toggle" id="menuToggle" aria-label="Toggle navigation">
+      ☰
+    </button>
+    <div class="overlay" id="overlay"></div>
+
+    <nav class="sidebar" id="sidebar">
+      <h2>MERN Reference</h2>
+      <div class="search-wrap">
+        <div class="search-field">
+          <input
+            type="search"
+            id="navSearch"
+            class="nav-search"
+            placeholder="Search sections…"
+            autocomplete="off"
+            aria-label="Search sections"
+          />
+        </div>
+        <span id="searchCount" class="search-count"></span>
+      </div>
+      <ul id="navList">
+        <li><a href="../reference/reference.html#s1">1. Environment Setup</a></li>
+        <li><a href="../reference/reference.html#s2">2. Folder Structure Diagram</a></li>
+        <li><a href="../backend/backend.html#s3">3. Backend Init</a></li>
+        <li><a href="../backend/backend.html#s4">4. Express Server</a></li>
+        <li><a href="../backend/backend.html#s5">5. Middlewares</a></li>
+        <li><a href="../backend/backend.html#s6">6. MongoDB + Mongoose</a></li>
+        <li><a href="../backend/backend.html#s7">7. Models / Controllers / Routes</a></li>
+        <li><a href="../backend/backend.html#s8">8. Validation &amp; Pagination</a></li>
+        <li><a href="../backend/backend.html#s9">9. Auth Deep-Dive (JWT + Cookies)</a></li>
+        <li><a href="../frontend/frontend.html#s10">10. Frontend Init</a></li>
+        <li><a href="../frontend/frontend.html#s11">11. Tailwind Setup</a></li>
+        <li><a href="../frontend/frontend.html#s12">12. Redux Toolkit (Counter)</a></li>
+        <li><a href="../frontend/frontend.html#s13">13. RTK Query + Injection</a></li>
+        <li><a href="../frontend/frontend.html#s14">14. React Boilerplate</a></li>
+        <li><a href="../frontend/frontend.html#s15">15. WebSockets (Socket.IO)</a></li>
+        <li><a href="../devops/devops.html#s16">16. Dev Workflow</a></li>
+        <li>
+          <a href="../devops/devops.html#s17">17. Testing (Jest + Supertest / Vitest)</a>
+          <ul>
+            <li><a href="../devops/devops.html#s17a">A. API — Jest + Supertest</a></li>
+            <li><a href="../devops/devops.html#s17b">B. UI — Vitest + RTL</a></li>
+          </ul>
+        </li>
+        <li>
+          <a href="../reference/reference.html#s18">18. TypeScript Setup + Commands</a>
+          <ul>
+            <li><a href="../reference/reference.html#s18a">A. Node / Express (CommonJS)</a></li>
+            <li><a href="../reference/reference.html#s18b">B. Vite (React / Vue)</a></li>
+          </ul>
+        </li>
+        <li><a href="../devops/devops.html#s19">19. CI/CD + Docs</a></li>
+        <li><a href="../devops/devops.html#s20">20. Docker Setup</a></li>
+        <li><a href="../devops/devops.html#s21">21. VPS + Nginx + SSL</a></li>
+        <li><a href="../devops/devops.html#s22">22. SSL &amp; Certificate Authority (CA)</a></li>
+        <li><a href="../reference/reference.html#s23">23. Commands Cheat Sheet</a></li>
+        <li><a href="../reference/reference.html#s24">24. Ubuntu Commands Cheat Sheet</a></li>
+        <li><a href="../reference/reference.html#s25">25. Git &amp; GitHub</a></li>
+      </ul>
+      <p id="searchEmpty" class="search-empty" hidden>No sections match.</p>
+      <p class="sidebar-home"><a href="../index.html">⌂ back to index</a></p>
+    </nav>
+
+    <main class="main-content">
+      <h1>DevOps — Workflow, Testing &amp; Deploy</h1>
+      <p class="subtitle">Sections 16–17 and 19–22 — dev workflow, tests, CI/CD, Docker, VPS/Nginx, SSL.</p>
+
+      <!-- ==================== SECTION 16 ==================== -->
+      <h2 id="s16">16. Dev Workflow</h2>
+
+      <h3>install</h3>
+      <pre><code>npm i -D concurrently</code></pre>
+
+      <h3>root package.json (concurrently)</h3>
+      <pre><code>{
+  "scripts": {
+    "dev": "concurrently \"npm run dev --prefix server\" \"npm run dev --prefix client\"",
+    "install:all": "npm i &amp;&amp; npm i --prefix server &amp;&amp; npm i --prefix client"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}</code></pre>
+
+      <h3>common ports</h3>
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Service</th>
+              <th>Port</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Vite dev server</td>
+              <td>5173</td>
+            </tr>
+            <tr>
+              <td>Express API</td>
+              <td>5000</td>
+            </tr>
+            <tr>
+              <td>MongoDB</td>
+              <td>27017</td>
+            </tr>
+            <tr>
+              <td>Nginx (prod)</td>
+              <td>80 / 443</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- ==================== SECTION 17 ==================== -->
+      <h2 id="s17">17. Testing — Jest + Supertest (API) + Vitest + RTL (UI)</h2>
+
+      <p>
+        Two halves. The Express API is tested with
+        <strong>Jest + Supertest</strong> against <code>app.js</code> (no
+        listener); the Vite/React UI with
+        <strong>Vitest + React Testing Library</strong>, which reuses the Vite
+        transform pipeline (so JSX and ESM need no extra config). Prefer a
+        single runner everywhere? Vitest runs the API tests too — see the end of
+        part B.
+      </p>
+
+      <h3 id="s17a">A. API — Jest + Supertest</h3>
+
+      <h3>install (server)</h3>
+      <pre><code>npm i -D jest supertest</code></pre>
+
+      <h3>app / server split (required for tests)</h3>
+      <pre><code>// app.js — everything from server.js EXCEPT connectDB() and app.listen()
+module.exports = app;</code></pre>
+
+      <pre><code>// server.js — now tiny
+const app = require('./app');
+const connectDB = require('./db');
+
+const start = async () =&gt; {
+  try {
+    await connectDB();
+    app.listen(env.PORT, () =&gt; console.log(`API on ${env.PORT}`));
+  } catch (err) {
+    console.error(err.message);
+    process.exit(1);
+  }
+};
+start();</code></pre>
+
+      <h3>tests/auth.test.js</h3>
+      <pre><code>const request = require('supertest');
+const mongoose = require('mongoose');
+const app = require('../app');
+require('dotenv').config();
+
+describe('Auth', () =&gt; {
+  beforeAll(async () =&gt; {
+    await mongoose.connect(process.env.MONGO_URI_TEST);
+  });
+
+  afterAll(async () =&gt; {
+    await mongoose.connection.close();
+  });
+
+  it('registers a user', async () =&gt; {
+    const res = await request(app)
+      .post('/api/auth/register')
+      .send({ name: 'Tester', email: 't@example.com', password: '123456' });
+    expect(res.statusCode).toBe(201);
+    expect(res.body.success).toBe(true);
+  });
+
+  it('rejects bad credentials', async () =&gt; {
+    const res = await request(app)
+      .post('/api/auth/login')
+      .send({ email: 't@example.com', password: 'wrong' });
+    expect(res.statusCode).toBe(401);
+  });
+});</code></pre>
+
+      <pre><code>// package.json scripts
+"test": "jest --runInBand",
+"test:watch": "jest --watch"</code></pre>
+
+      <div class="callout">
+        <strong>Note:</strong> Use a separate test DB via
+        <code>MONGO_URI_TEST</code> in <code>server/.env.test</code> and add
+        <code>"jest": { "testEnvironment": "node" }</code> to package.json. Run
+        once with <code>--runInBand</code> to avoid parallel DB collisions.
+      </div>
+
+      <h3 id="s17b">B. UI — Vitest + React Testing Library</h3>
+
+      <h3>install (client)</h3>
+      <pre><code>npm i -D vitest jsdom @testing-library/react @testing-library/jest-dom @testing-library/user-event
+npm i -D @vitest/coverage-v8        # coverage (v8 provider)
+npm i -D @vitest/ui msw             # optional: visual test UI + network mocks</code></pre>
+
+      <h3>vite.config.js — the test block rides along with the Vite config</h3>
+      <pre><code>/// &lt;reference types="vitest" /&gt;
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+
+export default defineConfig({
+  plugins: [react()],
+  test: {
+    globals: true,                    // describe/it/expect without imports
+    environment: 'jsdom',             // a DOM for React components
+    setupFiles: './src/test/setup.js',
+    css: false,                       // skip CSS processing inside tests
+    coverage: { provider: 'v8', reporter: ['text', 'html'] }
+  }
+});</code></pre>
+
+      <div class="callout">
+        <strong>Alternative:</strong> keep the test config in
+        <code>vitest.config.js</code> using <code>defineConfig</code> from
+        <code>vitest/config</code> — same <code>test</code> key, but that file
+        overrides <code>vite.config.js</code>. <code>globals: true</code> is
+        optional: without it, import
+        <code>{ describe, it, expect }</code> from <code>'vitest'</code> in every
+        file (the tests below import explicitly, so both styles work).
+      </div>
+
+      <h3>src/test/setup.js — runs once before every test file</h3>
+      <pre><code>import '@testing-library/jest-dom/vitest';   // toBeInTheDocument(), toHaveTextContent(), …
+
+// jsdom ships no matchMedia — stub it for components/hooks that query a breakpoint
+Object.defineProperty(window, 'matchMedia', {
+  writable: true,
+  value: (query) =&gt; ({
+    matches: false,
+    media: query,
+    onchange: null,
+    addEventListener() {},
+    removeEventListener() {},
+    dispatchEvent: () =&gt; false
+  })
+});</code></pre>
+
+      <h3>src/test/renderWithProviders.jsx — one wrapper for store + router</h3>
+      <pre><code>import { render } from '@testing-library/react';
+import { Provider } from 'react-redux';
+import { MemoryRouter } from 'react-router-dom';
+import { configureStore } from '@reduxjs/toolkit';
+import counterReducer from '../features/counter/counterSlice';
+import authReducer from '../features/auth/authSlice';
+import { apiSlice } from '../features/api/apiSlice';
+
+// a FRESH store per test — a shared store leaks state between tests
+export const makeStore = () =&gt;
+  configureStore({
+    reducer: {
+      counter: counterReducer,
+      auth: authReducer,
+      [apiSlice.reducerPath]: apiSlice.reducer
+    },
+    middleware: (getDefault) =&gt; getDefault().concat(apiSlice.middleware)
+  });
+
+export function renderWithProviders(ui, { route = '/', store = makeStore() } = {}) {
+  return {
+    store,
+    ...render(
+      &lt;Provider store={store}&gt;
+        &lt;MemoryRouter initialEntries={[route]}&gt;{ui}&lt;/MemoryRouter&gt;
+      &lt;/Provider&gt;
+    )
+  };
+}</code></pre>
+
+      <div class="callout">
+        <strong>Keep the test store in sync:</strong> if the app store grows
+        (new slices, extra middleware), export a <code>setupStore()</code>
+        factory from <code>app/store.js</code> (Section 12) and call it here too
+        — then the tests can never drift from the real store.
+      </div>
+
+      <h3>1 — pure reducer test (no DOM, fastest)</h3>
+      <pre><code>// src/features/counter/counterSlice.test.js
+import { describe, it, expect } from 'vitest';
+import reducer, { increment, decrement, incrementByAmount, reset } from './counterSlice';
+
+describe('counterSlice', () =&gt; {
+  it('starts at 0', () =&gt; {
+    expect(reducer(undefined, { type: 'init' })).toEqual({ value: 0 });
+  });
+
+  it('increments and decrements', () =&gt; {
+    expect(reducer({ value: 1 }, increment()).value).toBe(2);
+    expect(reducer({ value: 1 }, decrement()).value).toBe(0);
+  });
+
+  it('adds an amount, then resets', () =&gt; {
+    const bumped = reducer({ value: 1 }, incrementByAmount(4));
+    expect(bumped.value).toBe(5);
+    expect(reducer(bumped, reset()).value).toBe(0);
+  });
+});</code></pre>
+
+      <h3>2 — component test (render + click, real store)</h3>
+      <pre><code>// src/features/counter/Counter.test.jsx  (the Section 12 component)
+import { describe, it, expect } from 'vitest';
+import { screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import { renderWithProviders } from '../../test/renderWithProviders';
+import Counter from './Counter';
+
+describe('&lt;Counter /&gt;', () =&gt; {
+  it('renders 0 and reacts to clicks', async () =&gt; {
+    const user = userEvent.setup();
+    renderWithProviders(&lt;Counter /&gt;);
+
+    expect(screen.getByText('0')).toBeInTheDocument();
+
+    await user.click(screen.getByRole('button', { name: '+' }));
+    await user.click(screen.getByRole('button', { name: '+' }));
+    expect(screen.getByText('2')).toBeInTheDocument();
+
+    await user.click(screen.getByRole('button', { name: 'Reset' }));
+    expect(screen.getByText('0')).toBeInTheDocument();
+  });
+});</code></pre>
+
+      <div class="callout">
+        <strong>Query by role first:</strong>
+        <code>getByRole('button', { name: '+' })</code> asserts what a user (and
+        a screen reader) can actually do. Use <code>getByLabelText</code> for
+        form fields, <code>findBy…</code> for anything async, and
+        <code>waitFor</code> only when a plain <code>findBy…</code> will not do.
+      </div>
+
+      <h3>3 — mock an API hook to test a page in isolation</h3>
+      <pre><code>// src/features/appointments/AppointmentsPage.test.jsx
+import { describe, it, expect, vi } from 'vitest';
+import { screen } from '@testing-library/react';
+import { renderWithProviders } from '../../test/renderWithProviders';
+import AppointmentsPage from './AppointmentsPage';
+import * as api from './appointmentsApiSlice';   // the Section 15 slice
+
+// swap the generated hook for a plain vi.fn() the test drives
+vi.mock('./appointmentsApiSlice', () =&gt; ({ useGetAppointmentsQuery: vi.fn() }));
+
+describe('&lt;AppointmentsPage /&gt;', () =&gt; {
+  it('renders the fetched appointments', () =&gt; {
+    api.useGetAppointmentsQuery.mockReturnValue({
+      data: { items: [{ _id: '1', patient: 'Sara' }] },
+      isLoading: false,
+      isError: false
+    });
+
+    renderWithProviders(&lt;AppointmentsPage /&gt;);
+    expect(screen.getByText('Sara')).toBeInTheDocument();
+  });
+
+  it('shows the error state', () =&gt; {
+    api.useGetAppointmentsQuery.mockReturnValue({
+      data: undefined,
+      isLoading: false,
+      isError: true
+    });
+
+    renderWithProviders(&lt;AppointmentsPage /&gt;);
+    expect(screen.getByText(/something went wrong/i)).toBeInTheDocument();
+  });
+});</code></pre>
+
+      <div class="callout">
+        <strong>Network-level tests:</strong> to exercise the real RTK Query path
+        use <code>msw</code> — <code>setupServer</code> with
+        <code>http.get('/api/appointments', …)</code> and
+        <code>beforeAll(() =&gt; server.listen({ onUnhandledRequest: 'error' }))</code>.
+        Tests have no Vite dev proxy, so the API base must resolve to an absolute
+        URL: set <code>environmentOptions.jsdom.url</code> and point
+        <code>VITE_API_URL</code> at <code>http://localhost:5000/api</code> for
+        the test run.
+      </div>
+
+      <h3>client scripts</h3>
+      <pre><code>// client/package.json
+"test": "vitest run",             // CI: run once and exit
+"test:watch": "vitest",           // dev: re-run on change
+"test:ui": "vitest --ui",         // browser UI (@vitest/ui)
+"coverage": "vitest run --coverage"</code></pre>
+
+      <h3>CI — add the client suite (Section 19)</h3>
+      <pre><code>- run: npm ci --prefix client
+- run: npm test --prefix client
+- run: npm ci --prefix server
+- run: npm test --prefix server -- --runInBand</code></pre>
+
+      <h3>Optional — Vitest for the API too (one runner for the whole repo)</h3>
+      <pre><code>// server/vitest.config.js
+import { defineConfig } from 'vitest/config';
+
+export default defineConfig({
+  test: { environment: 'node', globals: true, include: ['tests/**/*.test.js'] }
+});</code></pre>
+
+      <pre><code>// server/tests/auth.test.js — same assertions as the Jest version, above
+import { describe, it, expect, beforeAll, afterAll } from 'vitest';
+import request from 'supertest';
+import mongoose from 'mongoose';
+import app from '../app.js';            // ESM test importing CommonJS — keep .js
+import 'dotenv/config';
+
+describe('Auth', () =&gt; {
+  beforeAll(async () =&gt; {
+    await mongoose.connect(process.env.MONGO_URI_TEST);
+  });
+
+  afterAll(async () =&gt; {
+    await mongoose.connection.close();
+  });
+
+  it('registers a user', async () =&gt; {
+    const res = await request(app)
+      .post('/api/auth/register')
+      .send({ name: 'Tester', email: 't@example.com', password: '123456' });
+    expect(res.statusCode).toBe(201);
+  });
+});</code></pre>
+
+      <div class="callout">
+        <strong>Jest or Vitest for the API?</strong> Both drive Supertest.
+        Vitest gives you one runner, one watch mode and one coverage tool for the
+        whole repo — the cost is importing <code>describe/it/expect</code> from
+        <code>'vitest'</code> (or setting <code>globals: true</code>) and writing
+        those test files as ESM.
+      </div>
+
+      <!-- ==================== SECTION 19 ==================== -->
+      <h2 id="s19">19. CI/CD + Docs</h2>
+
+      <h3>install</h3>
+      <pre><code>npm i swagger-jsdoc swagger-ui-express</code></pre>
+
+      <h3>.github/workflows/ci.yml</h3>
+      <pre><code>name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+      - run: npm run build --prefix client
+      - run: npm test --prefix server -- --runInBand</code></pre>
+
+      <h3>utils/swagger.js (auto-generated API docs)</h3>
+      <pre><code>const swaggerJsdoc = require('swagger-jsdoc');
+
+const options = {
+  definition: {
+    openapi: '3.0.0',
+    info: { title: 'MERN API', version: '1.0.0' },
+    servers: [{ url: '/api' }]
+  },
+  apis: ['./routes/*.js', './controllers/*.js']
+};
+
+module.exports = swaggerJsdoc(options);</code></pre>
+
+      <pre><code>// mounted in server.js
+const swaggerUi = require('swagger-ui-express');
+const specs = require('./utils/swagger');
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));</code></pre>
+
+      <h3>README.md template</h3>
+      <pre><code># MERN Boilerplate
+
+Full-stack starter: Vite + React + Redux Toolkit (RTK Query) + Tailwind + Express + MongoDB.
+
+## Stack
+- Client: React, React Router, Redux Toolkit, RTK Query, Tailwind
+- Server: Express, Mongoose, JWT (httpOnly cookies), express-rate-limit
+- Tooling: Docker Compose, Jest + Supertest, GitHub Actions
+
+## Quick start
+npm run install:all
+cp server/.env.example server/.env
+cp client/.env.example client/.env  (optional)
+npm run dev
+
+## Scripts
+| Command | Action                        |
+| ------- | ----------------------------- |
+| npm run dev | run server + client (concurrently) |
+| npm test --prefix server | run API tests  |
+
+## Env
+See server/.env.example and client/.env.example.
+
+## Deployment
+Docker:  docker-compose up -d --build
+VPS:     pm2 + nginx + certbot (Section 21)
+Docs:    /api-docs (Swagger UI)</code></pre>
+
+      <div class="callout">
+        <strong>Final production checklist:</strong> set
+        <code>NODE_ENV=production</code>, <code>secure: true</code> cookies
+        behind TLS, <code>helmet()</code> with a real CSP, rate limits on auth
+        routes, long random <code>JWT_SECRET</code>/<code>REFRESH_SECRET</code>,
+        and run the Jest suite in CI before every deploy.
+      </div>
+
+      <!-- ==================== SECTION 20 ==================== -->
+      <h2 id="s20">20. Docker Setup</h2>
+
+      <h3>server/Dockerfile</h3>
+      <pre><code>FROM node:20-alpine
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci --omit=dev
+COPY . .
+EXPOSE 5000
+CMD ["node", "server.js"]</code></pre>
+
+      <h3>client/Dockerfile</h3>
+      <pre><code># build stage
+FROM node:20-alpine AS build
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci
+COPY . .
+RUN npm run build
+
+# serve stage
+FROM nginx:alpine
+COPY --from=build /app/dist /usr/share/nginx/html
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]</code></pre>
+
+      <h3>docker-compose.yml (root)</h3>
+      <pre><code>version: '3.9'
+
+services:
+  mongo:
+    image: mongo:7
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_ROOT_PASSWORD}
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks: [mern]
+
+  server:
+    build: ./server
+    restart: unless-stopped
+    env_file: ./server/.env
+    depends_on:
+      mongo:
+        condition: service_healthy
+    ports:
+      - "5000:5000"
+    networks: [mern]
+
+  client:
+    build: ./client
+    restart: unless-stopped
+    depends_on:
+      - server
+    ports:
+      - "80:80"
+    networks: [mern]
+
+volumes:
+  mongo-data:
+
+networks:
+  mern:</code></pre>
+
+      <div class="callout">
+        <strong>Note:</strong> With Mongo auth enabled, point the server at it
+        via
+        <code>MONGO_URI=mongodb://root:${MONGO_ROOT_PASSWORD}@mongo:27017/mernapp?authSource=admin</code>
+        and set <code>MONGO_ROOT_PASSWORD</code> in the shell /
+        <code>.env</code> used by compose.
+      </div>
+
+      <h3>.dockerignore (both)</h3>
+      <pre><code>node_modules
+dist
+.env
+.git
+*.log</code></pre>
+
+      <h3>client/nginx.conf (SPA fallback)</h3>
+      <pre><code>server {
+    listen 80;
+    server_name _;
+    root /usr/share/nginx/html;
+    index index.html;
+
+    location /api/ {
+        proxy_pass http://server:5000/api/;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+    }
+
+    location / {
+        try_files $uri $uri/ /index.html;
+    }
+}</code></pre>
+
+      <!-- ==================== SECTION 21 ==================== -->
+      <h2 id="s21">21. VPS Setup + Nginx + SSL</h2>
+
+      <h3>install</h3>
+      <pre><code>npm i -g pm2</code></pre>
+
+      <h3>initial server setup</h3>
+      <pre><code>sudo apt update &amp;&amp; sudo apt upgrade -y
+sudo apt install -y curl git nginx ufw
+
+# node via nvm
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+source ~/.bashrc
+nvm install 20
+nvm use 20
+
+# pm2
+npm i -g pm2</code></pre>
+
+      <h3>pm2 commands</h3>
+      <pre><code>pm2 start server.js --name api
+pm2 save
+pm2 startup
+pm2 logs api
+pm2 restart api
+pm2 list</code></pre>
+
+      <h3>nginx site config — /etc/nginx/sites-available/mern</h3>
+      <pre><code>server {
+    listen 80;
+    server_name yourdomain.com www.yourdomain.com;
+
+    root /var/www/mern/client/dist;
+    index index.html;
+
+    location /api/ {
+        proxy_pass http://127.0.0.1:5000/api/;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    location / {
+        try_files $uri $uri/ /index.html;
+    }
+}</code></pre>
+
+      <h3>enable site</h3>
+      <pre><code>sudo ln -s /etc/nginx/sites-available/mern /etc/nginx/sites-enabled/
+sudo nginx -t
+sudo systemctl reload nginx</code></pre>
+
+      <h3>SSL with certbot</h3>
+      <pre><code>sudo apt install -y certbot python3-certbot-nginx
+sudo certbot --nginx -d yourdomain.com -d www.yourdomain.com
+sudo certbot renew --dry-run</code></pre>
+
+      <h3>firewall (ufw)</h3>
+      <pre><code>sudo ufw allow OpenSSH
+sudo ufw allow 'Nginx Full'
+sudo ufw enable
+sudo ufw status</code></pre>
+
+      <h3>deploy workflow</h3>
+      <pre><code>cd /var/www/mern
+git pull origin main
+cd server &amp;&amp; npm ci --omit=dev
+cd ../client &amp;&amp; npm ci &amp;&amp; npm run build
+pm2 restart api
+sudo systemctl reload nginx</code></pre>
+
+      <!-- ==================== SECTION 22 ==================== -->
+      <h2 id="s22">22. SSL &amp; Certificate Authority (CA)</h2>
+
+      <p>
+        Three routes: <strong>self-signed</strong> (dev only),
+        <strong>CA-signed</strong> (your own CA → trust locally, e.g. for HTTPS
+        in dev/internal networks), and <strong>Let's Encrypt</strong> (public
+        prod). Create your own CA once, then sign as many server certs as you
+        need.
+      </p>
+
+      <h3>create a local CA + sign a server certificate</h3>
+      <pre><code># 1. CA key + self-signed CA certificate
+openssl req -x509 -newkey rsa:2048 -nodes \
+  -keyout ca-key.pem -out ca-cert.pem -days 3650 \
+  -subj "/CN=My Local CA"
+
+# 2. server key + Certificate Signing Request (CSR)
+openssl req -newkey rsa:2048 -nodes \
+  -keyout server-key.pem -out server.csr \
+  -subj "/CN=localhost"
+
+# 3. sign the CSR with the CA (SANs come from v3.ext)
+openssl x509 -req -in server.csr \
+  -CA ca-cert.pem -CAkey ca-key.pem -CAcreateserial \
+  -out server-cert.pem -days 825 \
+  -extfile v3.ext</code></pre>
+
+      <h3>v3.ext (subject alternative names required by browsers)</h3>
+      <pre><code>subjectAltName = DNS:localhost, IP:127.0.0.1
+basicConstraints = CA:FALSE
+keyUsage = digitalSignature, keyEncipherment
+extendedKeyUsage = serverAuth</code></pre>
+
+      <h3>trust the CA (Ubuntu / browsers)</h3>
+      <pre><code>sudo cp ca-cert.pem /usr/local/share/ca-certificates/local-ca.crt
+sudo update-ca-certificates
+# also import ca-cert.pem into your BROWSER / mobile trust store
+openssl verify -CAfile ca-cert.pem server-cert.pem   # expect: OK</code></pre>
+
+      <h3>quick self-signed cert (dev, no CA)</h3>
+      <pre><code>openssl req -x509 -newkey rsa:2048 -nodes \
+  -keyout key.pem -out cert.pem -days 365 \
+  -subj "/CN=localhost"
+
+# inspect a cert / check expiry
+openssl x509 -in cert.pem -text -noout
+openssl x509 -enddate -noout -in cert.pem</code></pre>
+
+      <h3>HTTPS in Express (dev)</h3>
+      <pre><code>const https = require('https');
+const fs = require('fs');
+
+https
+  .createServer(
+    { key: fs.readFileSync('key.pem'), cert: fs.readFileSync('cert.pem') },
+    app
+  )
+  .listen(8443);</code></pre>
+
+      <h3>public certificates — Let's Encrypt (reuse Section 21)</h3>
+      <pre><code>sudo apt install -y certbot python3-certbot-nginx
+sudo certbot --nginx -d yourdomain.com -d www.yourdomain.com
+sudo certbot renew --dry-run       # auto-renews via systemd timer</code></pre>
+
+      <div class="callout">
+        <strong>Best practice:</strong> always terminate TLS at a reverse proxy
+        (Nginx/Caddy) in production — Express stays plain HTTP internally, and
+        NEVER commit <code>*.pem</code> / private keys to git.
+      </div>
+    </main>
+
+    <script src="../js/main.js"></script>
+  </body>
+</html>
