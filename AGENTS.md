@@ -3,7 +3,7 @@
 ## What this project is
 
 - **This is NOT a runnable MERN application.** It is a **static multi-file reference/cheatsheet site** containing copy-paste snippets for building a MERN stack app.
-- Project files (8 total, opened directly — no server/build needed, just double-click `index.html`):
+- Project files (9 total, opened directly — no server/build needed, just double-click `index.html`):
   - `index.html` — the **hub**: links to every section, every page, and every project file (also holds the shared sidebar + search).
   - `backend/backend.html` — Sections 3–9 (7 sections).
   - `frontend/frontend.html` — Sections 10–15 (6 sections).
@@ -12,12 +12,14 @@
   - `css/styles.css` — all styling (shared by every page, linked relatively: `css/…` from index, `../css/…` from pages).
   - `js/main.js` — all behaviour: sidebar search, scrollspy, mobile menu, copy buttons (same relative-link rule).
   - `verify.js` — optional consistency checker at the project root. **Run `node verify.js` after any edit** (see "Verification"). It is a plain Node script, not a build step: nothing imports it, the site works without it. Keep it in the root — it must not become a new folder.
-- Exactly **4 content folders** (`backend/`, `frontend/`, `devops/`, `reference/`) + `css/` + `js/` — do not add more folders without asking.
-- There is **no** `package.json`, server, client, `node_modules`, git repo, test suite, lint, or build step. Do **not** attempt to `npm install`, build, lint, or run anything.
+  - `.gitignore` — OS/editor junk only (`Thumbs.db`, `desktop.ini`, `.DS_Store`, `*~`). The site itself has nothing to ignore (no `node_modules`, no build output).
+- Exactly **4 content folders** (`backend/`, `frontend/`, `devops/`, `reference/`) + `css/` + `js/` — do not add more folders without asking. (Dotfolders such as `.git` are ignored by `verify.js` and are not counted.)
+- There is a **git repo** (`main` branch, no remote configured yet — see "Git"). There is still **no** `package.json`, server, client, `node_modules`, test suite, lint, or build step. Do **not** attempt to `npm install`, build, lint, or run anything.
 
 ## Current status
 
 - Restructured from the old single huge file into hub + 4 pages + shared css/js (pre-split backup exists only in temp). Last verified by `node verify.js`: 176 `<pre><code>` blocks escape-checked, 197 internal links/anchors resolve, `s1`–`s25` each exist exactly once, all 5 sidebars byte-identical, `js/main.js` parses.
+- **Under git:** one local repo on `main` with a single root commit containing every file; no remote yet (see "Git").
 - **Hardening pass done:** search now also matches the hub's per-section descriptions and keeps nested sub-links (18A/18B) reachable when only a sub-link matches the query; the mobile menu button tracks `aria-expanded`; Esc closes an open mobile sidebar; `css/styles.css` and `js/main.js` dedented to normal top-level indentation; `verify.js` added at the root to automate the checklist (it also fails if the 5 sidebars diverge). A later audit sweep also: fixed an inline `<code>` split across lines in `devops/devops.html` (broke regex tooling), extended inline-code chip styling to `.callout code` (with `overflow-wrap: anywhere` for long URIs), and confirmed every in-text "Section N" cross-reference (22 of them) points at the right heading.
 - **Added Vitest UI testing (Section 17B):** Section 17 now has two sub-anchors — `s17a` API (Jest + Supertest) and `s17b` UI (Vitest + React Testing Library): the `test` block in `vite.config.js`, `src/test/setup.js` (jest-dom matchers + a `matchMedia` stub), a `renderWithProviders`/`makeStore` helper with a fresh store per test, a reducer test for the Section 12 `counterSlice`, a component test for the Section 12 `Counter`, a `vi.mock` page test, MSW notes, client scripts + CI step, and an optional Vitest-for-the-API config. Mirrors the `s18a`/`s18b` pattern, so nothing was renumbered; all 5 sidebars, the hub and `verify.js` expectations were updated.
 - **25 sections** ordered by **MERN build workflow** (setup → folder structure → backend → frontend → realtime → tooling/quality → deploy → cheat sheets). Sections 17 and 18 each nest two sub-links (`#s17a`/`#s17b`, `#s18a`/`#s18b`). The sidebar has a **search bar** (`#navSearch` → `filterNav` in `js/main.js`) filtering entries by title + same-page section content; Enter jumps to the first match, Esc clears. HTML escapes verified (`&lt;`/`&gt;`/`&amp;&amp;` in snippets; no raw `<`, `&&`, `=>` inside any `<pre><code>`).
@@ -149,7 +151,19 @@ What `node verify.js` checks for you:
 - **Hardening pass** ("fix any problem"): sidebar search matches the hub's description text too and no longer hides a parent item (18) when only its nested sub-link matches; `aria-expanded` on the mobile toggle; Esc closes the open mobile sidebar; shared css/js dedented; **`verify.js`** added at the root to automate the checklist, including a byte-comparison of the 5 sidebar copies.
 - **Added Vitest testing** ("add testing using vitest") — split Section 17 into `s17a` (API: Jest + Supertest) and `s17b` (UI: Vitest + React Testing Library) sub-anchors, mirroring the `s18a`/`s18b` pattern so nothing had to be renumbered; all 5 sidebars, the hub list and `verify.js` expectations updated.
 
+## Git
+
+- One **local** repo on branch `main` (`git init -b main`), root commit holding every file. **No remote configured yet** — "push all" stops at the commit until a URL exists.
+- Committing is expected; still **do not** `npm install`, build, lint, or run a dev server. `node verify.js` is the only thing to run.
+- Git identity comes from global config (`Hossam Fathi <eng.hossam00@gmail.com>`).
+- `git add` prints `LF will be replaced by CRLF` warnings — default Windows `core.autocrlf=true`; harmless, do not "fix" line endings.
+- To publish later (needs a URL + credentials from the user):
+  ```
+  git remote add origin <repo-url>
+  git push -u origin main
+  ```
+
 ## Environment notes
 
 - Platform: Windows (PowerShell 5.1). Use the `edit`/`read`/`grep` tools for file work; avoid PowerShell file cmdlets.
-- No repo, no build step — editing these files is editing documentation only. Do not "fix" it into an app. `verify.js` is the one runnable script: it only reads the files and reports (`node verify.js`), it is never imported and never part of the site.
+- Now a git repo (branch `main`, no remote yet), still no build step — editing these files is editing documentation only. Do not "fix" it into an app. `verify.js` is the one runnable script: it only reads the files and reports (`node verify.js`), it is never imported and never part of the site. It ignores dotfolders (`.git`), so the folder check keeps passing with a repo present.
