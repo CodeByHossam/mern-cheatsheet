@@ -6,9 +6,9 @@
 - Project files (9 total, opened directly — no server/build needed, just double-click `index.html`):
   - `index.html` — the **hub**: links to every section, every page, and every project file (also holds the shared sidebar + search).
   - `backend/backend.html` — Sections 3–9 (7 sections).
-  - `frontend/frontend.html` — Sections 10–15 (6 sections).
-  - `devops/devops.html` — Sections 16–17, 19–22 (6 sections).
-  - `reference/reference.html` — Sections 1–2, 18, 23–25 (6 sections).
+  - `frontend/frontend.html` — Sections 10–16 (7 sections).
+  - `devops/devops.html` — Sections 17–18, 20–23 (6 sections).
+  - `reference/reference.html` — Sections 1–2, 19, 24–26 (6 sections).
   - `css/styles.css` — all styling (shared by every page, linked relatively: `css/…` from index, `../css/…` from pages).
   - `js/main.js` — all behaviour: sidebar search, scrollspy, mobile menu, copy buttons (same relative-link rule).
   - `verify.js` — optional consistency checker at the project root. **Run `node verify.js` after any edit** (see "Verification"). It is a plain Node script, not a build step: nothing imports it, the site works without it. Keep it in the root — it must not become a new folder.
@@ -18,18 +18,18 @@
 
 ## Current status
 
-- Restructured from the old single huge file into hub + 4 pages + shared css/js (pre-split backup exists only in temp). Last verified by `node verify.js`: 176 `<pre><code>` blocks escape-checked, 197 internal links/anchors resolve, `s1`–`s25` each exist exactly once, all 5 sidebars byte-identical, `js/main.js` parses.
+- Restructured from the old single huge file into hub + 4 pages + shared css/js (pre-split backup exists only in temp). Last verified by `node verify.js`: 229 `<pre><code>` blocks escape-checked, 203 internal links/anchors resolve, `s1`–`s26` each exist exactly once, all 5 sidebars byte-identical, `js/main.js` parses.
 - **Under git:** repo on `main`, pushed to `origin` (`CodeByHossam/mern-cheatsheet`); `main` tracks `origin/main` (see "Git").
 - **Hardening pass done:** search now also matches the hub's per-section descriptions and keeps nested sub-links (18A/18B) reachable when only a sub-link matches the query; the mobile menu button tracks `aria-expanded`; Esc closes an open mobile sidebar; `css/styles.css` and `js/main.js` dedented to normal top-level indentation; `verify.js` added at the root to automate the checklist (it also fails if the 5 sidebars diverge). A later audit sweep also: fixed an inline `<code>` split across lines in `devops/devops.html` (broke regex tooling), extended inline-code chip styling to `.callout code` (with `overflow-wrap: anywhere` for long URIs), and confirmed every in-text "Section N" cross-reference (22 of them) points at the right heading.
 - **Added Vitest UI testing (Section 17B):** Section 17 now has two sub-anchors — `s17a` API (Jest + Supertest) and `s17b` UI (Vitest + React Testing Library): the `test` block in `vite.config.js`, `src/test/setup.js` (jest-dom matchers + a `matchMedia` stub), a `renderWithProviders`/`makeStore` helper with a fresh store per test, a reducer test for the Section 12 `counterSlice`, a component test for the Section 12 `Counter`, a `vi.mock` page test, MSW notes, client scripts + CI step, and an optional Vitest-for-the-API config. Mirrors the `s18a`/`s18b` pattern, so nothing was renumbered; all 5 sidebars, the hub and `verify.js` expectations were updated.
-- **25 sections** ordered by **MERN build workflow** (setup → folder structure → backend → frontend → realtime → tooling/quality → deploy → cheat sheets). Sections 17 and 18 each nest two sub-links (`#s17a`/`#s17b`, `#s18a`/`#s18b`). The sidebar has a **search bar** (`#navSearch` → `filterNav` in `js/main.js`) filtering entries by title + same-page section content; Enter jumps to the first match, Esc clears. HTML escapes verified (`&lt;`/`&gt;`/`&amp;&amp;` in snippets; no raw `<`, `&&`, `=>` inside any `<pre><code>`).
-- Backend **JavaScript** snippets use **CommonJS** (`require`) on purpose — keep it that way unless explicitly asked. Backend **TypeScript** snippets (Section 18, Type A) use plain `require`/`module.exports` with `lib: ["esnext"]`, `types: ["node"]`, `moduleResolution: "bundler"`, and extensionless relative requires.
+- **28 sections** ordered by **MERN build workflow** (setup → folder structure → backend → frontend → realtime → tooling/quality → deploy → cheat sheets). Sections 18 and 19 each nest two sub-links (`#s18a`/`#s18b`, `#s19a`/`#s19b`). The sidebar has a **search bar** (`#navSearch` → `filterNav` in `js/main.js`) filtering entries by title + same-page section content; Enter jumps to the first match, Esc clears. HTML escapes verified (`&lt;`/`&gt;`/`&amp;&amp;` in snippets; no raw `<`, `&&`, `=>` inside any `<pre><code>`).
+- Backend **JavaScript** snippets use **CommonJS** (`require`) on purpose — keep it that way unless explicitly asked. Backend **TypeScript** snippets (Section 19, Type A) use plain `require`/`module.exports` with `lib: ["esnext"]`, `types: ["node"]`, `moduleResolution: "bundler"`, and extensionless relative requires.
 - Contributors' explicit asks historically covered: async/await everywhere (no `.then()`), rate limiter extracted to middleware, React Router wrapper-tag route guards, TypeScript setup, deployment, command cheat sheets, WebSockets, search, Vitest testing, and MERN-workflow ordering.
 
 ## File layout rules (IMPORTANT — multi-file)
 
 - **Which page holds which section:** see the index table below. Keep a section in its page unless the user asks to move it.
-- **Sidebar** (same markup on all 5 HTML files): `<li><a href="…#sN">` deep links must match the section's page + `<h2 id="sN">`. Format: `#sN` on the page that owns it is written as the full relative path everywhere (`backend/backend.html#s3` from index, `../backend/backend.html#s3` from other pages) so one uniform list works on every file. Changing the sidebar = editing **all 5** HTML files (search for `id="navList"`) — `node verify.js` fails loudly if the five copies diverge. Section 17 and Section 18 each nest two sub-links (`#s17a` A. API / `#s17b` B. UI in `devops/devops.html`; `#s18a` Type A / `#s18b` Type B in `reference/reference.html`) — the only exceptions to the 1:1 rule.
+- **Sidebar** (same markup on all 5 HTML files): `<li><a href="…#sN">` deep links must match the section's page + `<h2 id="sN">`. Format: `#sN` on the page that owns it is written as the full relative path everywhere (`backend/backend.html#s3` from index, `../backend/backend.html#s3` from other pages) so one uniform list works on every file. Changing the sidebar = editing **all 5** HTML files (search for `id="navList"`) — `node verify.js` fails loudly if the five copies diverge. Section 18 and Section 19 each nest two sub-links (`#s18a` A. API / `#s18b` B. UI in `devops/devops.html`; `#s19a` Type A / `#s19b` Type B in `reference/reference.html`) — the only exceptions to the 1:1 rule.
 - **index.html** must keep a link to *every* section (deep link) and to every project file (`css/styles.css`, `js/main.js`, `AGENTS.md`, `verify.js`, the 4 pages).
 - Each section page: `<h1>` + `<p class="subtitle">` + its sections; each section is `<h2 id="sN">…</h2>` → `<h3>` → `<pre><code>…</code></pre>`. Ends `</main>` → `<script src="…/js/main.js"></script>` → `</body>` → `</html>`.
 - Extra UI classes available: `.callout` (info boxes), `.table-wrapper` + `table` (reference tables).
@@ -90,16 +90,19 @@ Snippets should follow these four layered concepts when new examples are added o
 | 13 | `s13` | Frontend — RTK Query Base API + Endpoint Injection | `frontend/frontend.html` |
 | 14 | `s14` | Frontend — Common React Boilerplate | `frontend/frontend.html` |
 | 15 | `s15` | WebSockets — Backend (Node.js) + Frontend (Vite + React) | `frontend/frontend.html` |
-| 16 | `s16` | Dev Workflow | `devops/devops.html` |
-| 17 | `s17` | Testing — Jest + Supertest (API, `s17a`) + Vitest + RTL (UI, `s17b`) | `devops/devops.html` |
-| 18 | `s18` | TypeScript Setup — Type A Node/Express (`s18a`) + Type B Vite (`s18b`) | `reference/reference.html` |
-| 19 | `s19` | CI/CD + Docs | `devops/devops.html` |
-| 20 | `s20` | Docker Setup | `devops/devops.html` |
-| 21 | `s21` | VPS Setup + Nginx + SSL | `devops/devops.html` |
-| 22 | `s22` | SSL & Certificate Authority (CA) | `devops/devops.html` |
-| 23 | `s23` | Commands Cheat Sheet | `reference/reference.html` |
-| 24 | `s24` | Ubuntu Commands Cheat Sheet | `reference/reference.html` |
-| 25 | `s25` | Git & GitHub | `reference/reference.html` |
+| 16 | `s16` | React Native — Mobile (Expo / RN CLI) | `frontend/frontend.html` |
+| 17 | `s17` | Dev Workflow | `devops/devops.html` |
+| 18 | `s18` | Testing — Jest + Supertest (API, `s18a`) + Vitest + RTL (UI, `s18b`) | `devops/devops.html` |
+| 19 | `s19` | TypeScript Setup — Type A Node/Express (`s19a`) + Type B Vite (`s19b`) | `reference/reference.html` |
+| 20 | `s20` | CI/CD + Docs | `devops/devops.html` |
+| 21 | `s21` | Docker Setup | `devops/devops.html` |
+| 22 | `s22` | VPS Setup + Nginx + SSL | `devops/devops.html` |
+| 23 | `s23` | SSL & Certificate Authority (CA) | `devops/devops.html` |
+| 24 | `s24` | Commands Cheat Sheet | `reference/reference.html` |
+| 25 | `s25` | Ubuntu Commands Cheat Sheet | `reference/reference.html` |
+| 26 | `s26` | Git & GitHub | `reference/reference.html` |
+| 27 | `s27` | Other JavaScript Libraries | `frontend/frontend.html` |
+| 28 | `s28` | Frontend — Animations (AOS + Animate.css) | `frontend/frontend.html` |
 
 ## Rules for editing the HTML pages (IMPORTANT)
 

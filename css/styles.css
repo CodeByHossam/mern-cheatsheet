@@ -168,6 +168,23 @@ body {
   display: none;
 }
 
+.sidebar-home-top {
+  margin-bottom: 0.75rem;
+}
+
+.sidebar-home-top a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: #e2e8f0;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.sidebar-home-top a:hover {
+  color: #38bdf8;
+}
+
 .sidebar-home {
   margin-top: 1rem;
   padding-top: 0.75rem;

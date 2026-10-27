@@ -140,20 +140,20 @@ PAGES.forEach((file) => {
   text.replace(/<h3 id="(s\d+[ab])">/g, (_, id) => ((owners[id] = owners[id] || []).push(file), _));
 });
 let idIssues = 0;
-for (let n = 1; n <= 25; n++) {
+for (let n = 1; n <= 28; n++) {
   const id = "s" + n;
   if (!owners[id] || owners[id].length !== 1) {
     idIssues++;
     bad(`${id} occurs ${owners[id] ? owners[id].length : 0}x`);
   }
 }
-["s17a", "s17b", "s18a", "s18b"].forEach((id) => {
+["s18a", "s18b", "s19a", "s19b"].forEach((id) => {
   if (!owners[id] || owners[id].length !== 1) {
     idIssues++;
     bad(`${id} occurs ${owners[id] ? owners[id].length : 0}x`);
   }
 });
-if (!idIssues) ok("s1..s25 (+ s17a/s17b/s18a/s18b) each exist exactly once");
+if (!idIssues) ok("s1..s28 (+ s18a/s18b/s19a/s19b) each exist exactly once");
 
 // ── sidebar is identical on all pages, lists all 25 ─────────────
 const sidebars = {};
@@ -178,23 +178,23 @@ if (navFiles.length === PAGES.length) {
     ref.replace(/#(s\d+[ab]?)(?=\")/g, (_, id) => (ids.push(id), _));
     const top = ids.filter((i) => /^s\d+$/.test(i));
     const missing = [];
-    for (let n = 1; n <= 25; n++) if (top.filter((i) => i === "s" + n).length !== 1) missing.push("s" + n);
+    for (let n = 1; n <= 28; n++) if (top.filter((i) => i === "s" + n).length !== 1) missing.push("s" + n);
     const subs = ids.filter((i) => /s\d+[ab]$/.test(i)).sort().join();
     if (missing.length) bad("sidebar missing/duplicated: " + missing.join(", "));
-    else if (subs !== "s17a,s17b,s18a,s18b") bad("sidebar sub-links: " + subs);
-    else ok("sidebar identical on all 5 pages, lists all 25 + s17a/s17b/s18a/s18b");
+    else if (subs !== "s18a,s18b,s19a,s19b") bad("sidebar sub-links: " + subs);
+    else ok("sidebar identical on all 5 pages, lists all 28 + s18a/s18b/s19a/s19b");
   }
 }
 
 // ── hub completeness ────────────────────────────────────────────
 const hub = read("index.html");
 const hubMissing = [];
-for (let n = 1; n <= 25; n++) if (!hub.includes(`#s${n}"`)) hubMissing.push("s" + n);
+for (let n = 1; n <= 28; n++) if (!hub.includes(`#s${n}"`)) hubMissing.push("s" + n);
 [...PAGES.filter((p) => p !== "index.html"), CSS, JS, ...EXTRAS].forEach((f) => {
   if (!hub.includes(`"${f}"`)) hubMissing.push(f);
 });
 if (hubMissing.length) bad("index.html missing links to: " + hubMissing.join(", "));
-else ok("index.html deep-links all 25 sections + every project file");
+else ok("index.html deep-links all 28 sections + every project file");
 
 // ── shared assets sanity ────────────────────────────────────────
 try {

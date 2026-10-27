@@ -14,6 +14,7 @@
 
     <nav class="sidebar" id="sidebar">
       <h2>MERN Reference</h2>
+      <p class="sidebar-home-top"><a href="../index.html">⌂ Home</a></p>
       <div class="search-wrap">
         <div class="search-field">
           <input
@@ -43,28 +44,31 @@
         <li><a href="../frontend/frontend.html#s13">13. RTK Query + Injection</a></li>
         <li><a href="../frontend/frontend.html#s14">14. React Boilerplate</a></li>
         <li><a href="../frontend/frontend.html#s15">15. WebSockets (Socket.IO)</a></li>
-        <li><a href="../devops/devops.html#s16">16. Dev Workflow</a></li>
+        <li><a href="../frontend/frontend.html#s16">16. React Native</a></li>
+        <li><a href="../devops/devops.html#s17">17. Dev Workflow</a></li>
         <li>
-          <a href="../devops/devops.html#s17">17. Testing (Jest + Supertest / Vitest)</a>
+          <a href="../devops/devops.html#s18">18. Testing (Jest + Supertest / Vitest)</a>
           <ul>
-            <li><a href="../devops/devops.html#s17a">A. API — Jest + Supertest</a></li>
-            <li><a href="../devops/devops.html#s17b">B. UI — Vitest + RTL</a></li>
+            <li><a href="../devops/devops.html#s18a">A. API — Jest + Supertest</a></li>
+            <li><a href="../devops/devops.html#s18b">B. UI — Vitest + RTL</a></li>
           </ul>
         </li>
         <li>
-          <a href="../reference/reference.html#s18">18. TypeScript Setup + Commands</a>
+          <a href="../reference/reference.html#s19">19. TypeScript Setup + Commands</a>
           <ul>
-            <li><a href="../reference/reference.html#s18a">A. Node / Express (CommonJS)</a></li>
-            <li><a href="../reference/reference.html#s18b">B. Vite (React / Vue)</a></li>
+            <li><a href="../reference/reference.html#s19a">A. Node / Express (CommonJS)</a></li>
+            <li><a href="../reference/reference.html#s19b">B. Vite (React / Vue)</a></li>
           </ul>
         </li>
-        <li><a href="../devops/devops.html#s19">19. CI/CD + Docs</a></li>
-        <li><a href="../devops/devops.html#s20">20. Docker Setup</a></li>
-        <li><a href="../devops/devops.html#s21">21. VPS + Nginx + SSL</a></li>
-        <li><a href="../devops/devops.html#s22">22. SSL &amp; Certificate Authority (CA)</a></li>
-        <li><a href="../reference/reference.html#s23">23. Commands Cheat Sheet</a></li>
-        <li><a href="../reference/reference.html#s24">24. Ubuntu Commands Cheat Sheet</a></li>
-        <li><a href="../reference/reference.html#s25">25. Git &amp; GitHub</a></li>
+        <li><a href="../devops/devops.html#s20">20. CI/CD + Docs</a></li>
+        <li><a href="../devops/devops.html#s21">21. Docker Setup</a></li>
+        <li><a href="../devops/devops.html#s22">22. VPS + Nginx + SSL</a></li>
+        <li><a href="../devops/devops.html#s23">23. SSL &amp; Certificate Authority (CA)</a></li>
+        <li><a href="../reference/reference.html#s24">24. Commands Cheat Sheet</a></li>
+        <li><a href="../reference/reference.html#s25">25. Ubuntu Commands Cheat Sheet</a></li>
+        <li><a href="../reference/reference.html#s26">26. Git &amp; GitHub</a></li>
+        <li><a href="../frontend/frontend.html#s27">27. Other JS Libraries</a></li>
+        <li><a href="../frontend/frontend.html#s28">28. Frontend — Animations</a></li>
       </ul>
       <p id="searchEmpty" class="search-empty" hidden>No sections match.</p>
       <p class="sidebar-home"><a href="../index.html">⌂ back to index</a></p>
@@ -72,7 +76,10 @@
 
     <main class="main-content">
       <h1>Frontend — Vite + React</h1>
-      <p class="subtitle">Sections 10–15 — Vite, Tailwind, Redux Toolkit, RTK Query, React boilerplate, WebSockets.</p>
+      <p class="subtitle">
+        Sections 10–16 — Vite, Tailwind, Redux Toolkit, RTK Query, React
+        boilerplate, WebSockets, React Native.
+      </p>
 
       <!-- ==================== SECTION 10 ==================== -->
       <h2 id="s10">10. Frontend — Vite + React Initialization</h2>
@@ -92,11 +99,11 @@ npm run dev</code></pre>
         <strong>Same folder vs <code>client/</code>:</strong>
         <code>npm create vite@latest . -- --template react</code> scaffolds
         <code>index.html</code> + <code>src/</code> right here (Vite asks before
-        touching a non-empty folder). Scripts then run from this folder
-        directly — <code>npm run dev</code> instead of
-        <code>npm run dev --prefix client</code> (Section 16). Keep the
-        separate <code>client/</code> folder when you follow the two-folder
-        layout used everywhere else in this doc (Section 2).
+        touching a non-empty folder). Scripts then run from this folder directly
+        — <code>npm run dev</code> instead of
+        <code>npm run dev --prefix client</code> (Section 17). Keep the separate
+        <code>client/</code> folder when you follow the two-folder layout used
+        everywhere else in this doc (Section 2).
       </div>
 
       <h3>install deps</h3>
@@ -319,7 +326,7 @@ export const apiSlice = createApi({
         re-add <code>prepareHeaders</code> reading from
         <code>getState().auth</code> or localStorage.
         <strong>Base URL:</strong> relative <code>/api</code> is proxied by Vite
-        in dev (Section 10) and Nginx in prod (Section 21) —
+        in dev (Section 10) and Nginx in prod (Section 22) —
         <code>VITE_API_URL</code> is only needed if you call the API
         cross-origin.
       </div>
@@ -766,15 +773,18 @@ api.interceptors.response.use(
 );</code></pre>
 
       <!-- ==================== SECTION 15 ==================== -->
-      <h2 id="s15">15. WebSockets — Backend (Node.js) + Frontend (Vite + React)</h2>
+      <h2 id="s15">
+        15. WebSockets — Backend (Node.js) + Frontend (Vite + React)
+      </h2>
 
       <p>
         REST is request/response — the client must poll. A WebSocket keeps one
-        persistent connection open so the <strong>server can push</strong>
-        (chat, live notifications, appointment updates) the moment something
-        happens in MongoDB. <strong>Socket.IO</strong> wraps the WebSocket
-        protocol with rooms, reconnection, and an auth handshake, and ships
-        with a matching client for the Vite app.
+        persistent connection open so the
+        <strong>server can push</strong> (chat, live notifications, appointment
+        updates) the moment something happens in MongoDB.
+        <strong>Socket.IO</strong> wraps the WebSocket protocol with rooms,
+        reconnection, and an auth handshake, and ships with a matching client
+        for the Vite app.
       </p>
 
       <div class="table-wrapper">
@@ -1111,8 +1121,8 @@ export const { useGetAppointmentsQuery } = appointmentsApiSlice;</code></pre>
       <div class="callout">
         <strong>Two-way sync:</strong> the mutation still invalidates
         <code>providesTags</code> (Section 13) for everyone already fetching —
-        the socket listener only removes the gap between "row written to
-        Mongo" and "next poll".
+        the socket listener only removes the gap between "row written to Mongo"
+        and "next poll".
       </div>
 
       <h3>nginx — proxy WebSockets in production</h3>
@@ -1132,6 +1142,422 @@ export const { useGetAppointmentsQuery } = appointmentsApiSlice;</code></pre>
         <code>@socket.io/redis-adapter</code> (a Redis pub/sub channel), or
         sticky sessions at the load balancer. Local dev and a single
         <code>pm2</code> process need neither.
+      </div>
+      <h2 id="s16">16. React Native — Mobile (Expo / RN CLI)</h2>
+
+      <div class="callout">
+        <strong>Two tracks:</strong> <code>Expo</code> (managed, fastest start,
+        OTA updates, EAS builds) vs <code>React Native CLI</code> (full native
+        control, custom native modules). Start with Expo; eject only when you
+        need a native module Expo doesn't ship. The snippets below assume Expo
+        (SDK 51+) but the component code is identical on both.
+      </div>
+
+      <h3>Init</h3>
+      <p><strong>Expo (recommended)</strong></p>
+
+      <p>
+        <strong>Default template</strong> — Expo Router + TypeScript +
+        navigation (ready-made starter)
+      </p>
+      <pre><code>npx create-expo-app@latest my-app</code></pre>
+
+      <p>
+        <strong>Create in the CURRENT folder</strong> (use
+        <code>.</code> instead of a project name — works with any template
+        above)
+      </p>
+      <pre><code>npx create-expo-app@latest .</code></pre>
+
+      <p><strong>Basic TypeScript project</strong> (no router, minimal)</p>
+      <pre><code>npx create-expo-app@latest my-app --template blank-typescript</code></pre>
+
+      <p><strong>Basic JavaScript project</strong></p>
+      <pre><code>npx create-expo-app@latest my-app --template blank</code></pre>
+
+      <p>
+        <strong>Expo — start the dev server</strong> (run inside the project
+        folder)
+      </p>
+      <pre><code>npx expo start</code></pre>
+
+      <p><strong>Expo — start with a clean cache</strong></p>
+      <pre><code>npx expo start -c</code></pre>
+      <pre><code>npx expo start --clear</code></pre>
+
+      <p><strong>React Native CLI — create in a NEW folder</strong></p>
+      <pre><code>npx @react-native-community/cli@latest init ClinicMobile --template react-native-template-typescript</code></pre>
+
+      <p>
+        <strong>React Native CLI — one-liner with a ready-made template</strong>
+      </p>
+      <pre><code>npx @react-native-community/cli@latest init MyApp</code></pre>
+
+      <p><strong>React Native CLI — start on Android</strong></p>
+      <pre><code>npx react-native run-android</code></pre>
+
+      <p><strong>React Native CLI — start on iOS</strong> (macOS only)</p>
+      <pre><code>npx react-native run-ios</code></pre>
+
+      <p><strong>React Native CLI — start Metro with a clean cache</strong></p>
+      <pre><code>npx react-native start --reset-cache</code></pre>
+
+      <h3>Dynamic routing &amp; navigation (quick reference)</h3>
+
+      <div class="callout">
+        <strong>Expo Router</strong> (file-based): a file at
+        <code>app/users/[id].jsx</code> becomes the route
+        <code>/users/:id</code>. Use <code>useLocalSearchParams()</code> to read
+        params. <strong>React Navigation</strong> (manual): define a
+        <code>Stack</code>/<code>Tabs</code> navigator and call
+        <code>navigation.navigate('Screen', { id })</code>.
+      </div>
+
+      <p><strong>Expo Router — dynamic segment</strong></p>
+      <pre><code>// app/users/[id].jsx
+import { useLocalSearchParams } from 'expo-router';
+export default function UserDetail() {
+  const { id } = useLocalSearchParams();
+  return &lt;Text&gt;User {id}&lt;/Text&gt;;
+}</code></pre>
+
+      <p><strong>Expo Router — programmatic navigation</strong></p>
+      <pre><code>import { router } from 'expo-router';
+router.push('/users/42');
+router.replace('/home');
+router.back();</code></pre>
+
+      <p><strong>React Navigation — Stack + params</strong></p>
+      <pre><code>const Stack = createNativeStackNavigator();
+&lt;Stack.Navigator&gt;
+  &lt;Stack.Screen name="Home" component={Home} /&gt;
+  &lt;Stack.Screen name="Detail" component={Detail} /&gt;
+&lt;/Stack.Navigator&gt;
+
+// navigate with params
+navigation.navigate('Detail', { id: 42 });
+
+// read params in the target screen
+const { id } = route.params;</code></pre>
+
+      <p><strong>React Navigation — Tabs</strong></p>
+      <pre><code>const Tab = createBottomTabNavigator();
+&lt;Tab.Navigator&gt;
+  &lt;Tab.Screen name="Home" component={Home} /&gt;
+  &lt;Tab.Screen name="Profile" component={Profile} /&gt;
+&lt;/Tab.Navigator&gt;</code></pre>
+
+      <h3>Project structure</h3>
+      <pre><code>clinic-mobile/
+├── app/                  # Expo Router (file-based) — or src/screens with RN CLI
+│   ├── _layout.jsx
+│   ├── index.jsx
+│   └── patients/[id].jsx
+├── src/
+│   ├── api/              # axios instance (Section 13 pattern)
+│   ├── store/            # Redux Toolkit (reuse Section 12 slice)
+│   ├── components/
+│   ├── hooks/            # useAuth, useSocket
+│   └── utils/            # formatDate (Section: utils)
+├── app.json              # Expo config (name, slug, icons, splash)
+└── eas.json              # EAS build profiles</code></pre>
+
+      <h3>Navigation (React Navigation)</h3>
+      <pre><code>// src/navigation/RootNavigator.jsx
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import HomeScreen from '../screens/HomeScreen';
+import PatientDetail from '../screens/PatientDetail';
+
+const Stack = createNativeStackNavigator();
+
+export default function RootNavigator() {
+  return (
+    &lt;NavigationContainer&gt;
+      &lt;Stack.Navigator&gt;
+        &lt;Stack.Screen name="Home" component={HomeScreen} /&gt;
+        &lt;Stack.Screen name="PatientDetail" component={PatientDetail} /&gt;
+      &lt;/Stack.Navigator&gt;
+    &lt;/NavigationContainer&gt;
+  );
+}</code></pre>
+
+      <div class="callout">
+        With <strong>Expo Router</strong>, files in <code>app/</code> become
+        routes automatically (like Next.js). Pick one router and stay consistent
+        — mixing React Navigation + Expo Router in the same app is a common
+        source of bugs.
+      </div>
+
+      <h3>API client (platform-aware base URL)</h3>
+      <pre><code>// src/api/client.js
+import axios from 'axios';
+import { Platform } from 'react-native';
+
+const baseURL = __DEV__
+  ? Platform.select({
+      ios: 'http://localhost:5000/api',
+      android: 'http://10.0.2.2:5000/api',   // emulator → host machine
+      default: 'http://localhost:5000/api',
+    })
+  : 'https://api.yourclinic.com/api';
+
+export const api = axios.create({ baseURL, withCredentials: false });
+
+// attach token from secure storage
+api.interceptors.request.use(async (config) =&gt; {
+  const token = await SecureStore.getItemAsync('accessToken');
+  if (token) config.headers.Authorization = `Bearer ${token}`;
+  return config;
+});</code></pre>
+
+      <h3>State (reuse the Section 12 store)</h3>
+      <pre><code>// src/store/store.js  — identical to web; RTK works unchanged
+import { configureStore } from '@reduxjs/toolkit';
+import { authSlice } from './authSlice';
+import { apiSlice } from './apiSlice';
+
+export const store = configureStore({
+  reducer: { auth: authSlice.reducer, [apiSlice.reducerPath]: apiSlice.reducer },
+  middleware: (gDM) =&gt; gDM().concat(apiSlice.middleware),
+});</code></pre>
+
+      <h3>Styling (StyleSheet + platform)</h3>
+      <pre><code>import { StyleSheet, Platform, View, Text } from 'react-native';
+
+export default function Card({ title, children }) {
+  return (
+    &lt;View style={styles.card}&gt;
+      &lt;Text style={styles.title}&gt;{title}&lt;/Text&gt;
+      {children}
+    &lt;/View&gt;
+  );
+}
+
+const styles = StyleSheet.create({
+  card: {
+    padding: 16,
+    borderRadius: 12,
+    backgroundColor: '#fff',
+    ...Platform.select({
+      ios: { shadowColor: '#000', shadowOpacity: 0.08, shadowRadius: 8 },
+      android: { elevation: 3 },
+    }),
+  },
+  title: { fontSize: 16, fontWeight: '600', color: '#111' },
+});</code></pre>
+
+      <h3>Lists &amp; performance</h3>
+      <pre><code>// Always use FlatList for long lists — never .map() over 50+ items
+import { FlatList } from 'react-native';
+
+&lt;FlatList
+  data={patients}
+  keyExtractor={(p) =&gt; p._id}
+  renderItem={({ item }) =&gt; &lt;PatientRow patient={item} /&gt;}
+  initialNumToRender={10}
+  windowSize={5}
+  removeClippedSubviews
+/&gt;</code></pre>
+
+      <h3>Permissions &amp; native modules</h3>
+      <pre><code>// app.json — declare permissions up front (Expo)
+{
+  "expo": {
+    "plugins": [
+      ["expo-camera", { "cameraPermission": "Allow clinic to scan patient QR codes." }],
+      ["expo-location", { "locationAlwaysAndWhenInUsePermission": "Used for check-in geofencing." }]
+    ]
+  }
+}</code></pre>
+
+      <h3>Build &amp; deploy (EAS)</h3>
+      <pre><code># eas.json
+{
+  "build": {
+    "development": { "developmentClient": true, "distribution": "internal" },
+    "preview":     { "distribution": "internal" },
+    "production":  { "autoIncrement": true }
+  },
+  "submit": {
+    "production": { "ios": { "appleId": "you@clinic.com" } }
+  }
+}
+
+# build + submit
+eas build --platform all --profile production
+eas submit --platform all --latest
+
+# OTA update without store review
+eas update --branch production --message "fix appointment date format"</code></pre>
+
+      <h2 id="s27">27. Other JavaScript Libraries</h2>
+
+      <p class="subtitle">Phaser 2D Games — more libraries to follow.</p>
+
+      <h3>Phaser 3 — 2D Games</h3>
+
+      <div class="callout">
+        <strong>Phaser 3</strong> is a fast 2D game framework for the browser
+        (Canvas/WebGL). Install with <code>npm i phaser</code> and bundle with
+        Vite. The snippets below build a tiny arcade game: a player, platforms,
+        collectible stars and a score.
+      </div>
+
+      <h3>Setup (Vite)</h3>
+      <pre><code>npm create vite@latest phaser-game -- --template vanilla
+cd phaser-game
+npm i phaser
+npm run dev</code></pre>
+
+      <h3>Game config</h3>
+      <pre><code>import Phaser from 'phaser';
+
+const config = {
+  type: Phaser.AUTO,
+  width: 800,
+  height: 600,
+  physics: { default: 'arcade', arcade: { gravity: { y: 300 }, debug: false } },
+  scene: { preload, create, update },
+};
+
+new Phaser.Game(config);</code></pre>
+
+      <h3>preload — load assets</h3>
+      <pre><code>function preload() {
+  this.load.image('sky', 'assets/sky.png');
+  this.load.image('ground', 'assets/platform.png');
+  this.load.image('star', 'assets/star.png');
+  this.load.image('bomb', 'assets/bomb.png');
+  this.load.spritesheet('dude', 'assets/dude.png', { frameWidth: 32, frameHeight: 48 });
+}</code></pre>
+
+      <h3>create — world, player, stars, score</h3>
+      <pre><code>let player, platforms, stars, bombs, score = 0, scoreText;
+
+function create() {
+  this.add.image(400, 300, 'sky');
+
+  platforms = this.physics.add.staticGroup();
+  platforms.create(400, 568, 'ground').setScale(2).refreshBody();
+  platforms.create(600, 400, 'ground');
+  platforms.create(50, 250, 'ground');
+  platforms.create(750, 220, 'ground');
+
+  player = this.physics.add.sprite(100, 450, 'dude');
+  player.setBounce(0.2);
+  player.setCollideWorldBounds(true);
+
+  this.anims.create({ key: 'left', frames: this.anims.generateFrameNumbers('dude', { start: 0, end: 3 }), frameRate: 10, repeat: -1 });
+  this.anims.create({ key: 'turn', frames: [{ key: 'dude', frame: 4 }], frameRate: 20 });
+  this.anims.create({ key: 'right', frames: this.anims.generateFrameNumbers('dude', { start: 5, end: 8 }), frameRate: 10, repeat: -1 });
+
+  this.physics.add.collider(player, platforms);
+
+  stars = this.physics.add.group({ key: 'star', repeat: 11, setXY: { x: 12, y: 0, stepX: 70 } });
+  stars.children.iterate((c) =&gt; c.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8)));
+  this.physics.add.collider(stars, platforms);
+  this.physics.add.overlap(player, stars, collectStar, null, this);
+
+  scoreText = this.add.text(16, 16, 'Score: 0', { fontSize: '32px', fill: '#fff' });
+}
+
+function collectStar(player, star) {
+  star.disableBody(true, true);
+  score += 10;
+  scoreText.setText('Score: ' + score);
+}</code></pre>
+
+      <h3>update — input + movement</h3>
+      <pre><code>function update() {
+  const cursors = this.input.keyboard.createCursorKeys();
+  if (cursors.left.isDown) {
+    player.setVelocityX(-160);
+    player.anims.play('left', true);
+  } else if (cursors.right.isDown) {
+    player.setVelocityX(160);
+    player.anims.play('right', true);
+  } else {
+    player.setVelocityX(0);
+    player.anims.play('turn');
+  }
+  if (cursors.up.isDown &amp;&amp; player.body.touching.down) {
+    player.setVelocityY(-330);
+  }
+}</code></pre>
+
+      <h3>Scene switch &amp; tween (quick)</h3>
+      <pre><code>// switch scene
+this.scene.start('GameOver', { score });
+
+// tween a sprite
+this.tweens.add({
+  targets: star,
+  y: star.y - 50,
+  alpha: 0,
+  duration: 500,
+  onComplete: () =&gt; star.destroy(),
+});
+</code></pre>
+      <div class="animations-topics">
+        <!-- ============================================= -->
+        <!-- TOPIC 1: AOS (Animate On Scroll)              -->
+        <!-- ============================================= -->
+        <section class="topic">
+          <h2 id="s28">28. Frontend — Animations</h2>
+          <p class="subtitle">
+            Two independent tools: AOS handles scroll-triggering, Animate.css
+            provides ready-made keyframe effects.
+          </p>
+
+          <h3>AOS (Animate On Scroll)</h3>
+          <p>AOS triggers CSS animations when elements enter the viewport.</p>
+
+          <h4>Install</h4>
+          <pre><code>npm i aos</code></pre>
+
+          <h4>Usage</h4>
+          <pre><code>// main.jsx
+import AOS from 'aos';
+import 'aos/dist/aos.css';
+
+AOS.init({ duration: 800, once: true, offset: 100 });
+
+// usage in JSX
+&lt;section data-aos="fade-up"&gt;Fades up on scroll&lt;/section&gt;
+&lt;div data-aos="zoom-in" data-aos-delay="200"&gt;Zooms in&lt;/div&gt;
+&lt;img data-aos="flip-left" data-aos-duration="1200" /&gt;</code></pre>
+
+          <h4>Reference (options)</h4>
+          <pre><code>AOS.init({
+  duration: 800,   // animation duration (ms)
+  once: true,      // animate only once
+  offset: 100,     // trigger offset (px)
+  delay: 0,        // delay before animation
+  easing: 'ease',  // easing function
+});</code></pre>
+        </section>
+
+        <!-- ============================================= -->
+        <!-- TOPIC 2: Animate.css                          -->
+        <!-- ============================================= -->
+        <section class="topic">
+          <h3>Animate.css</h3>
+          <p>
+            A library of ready-made keyframe animations applied via classes.
+          </p>
+
+          <h4>Install</h4>
+          <pre><code>npm i animate.css</code></pre>
+
+          <h4>Usage</h4>
+          <pre><code>// main.jsx / App.jsx
+import 'animate.css';
+
+// apply classes
+&lt;h1 className="animate__animated animate__fadeInDown"&gt;Hello&lt;/h1&gt;
+&lt;button className="animate__animated animate__pulse animate__infinite"&gt;Click&lt;/button&gt;</code></pre>
+        </section>
       </div>
     </main>
 

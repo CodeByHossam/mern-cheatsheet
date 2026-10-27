@@ -14,6 +14,7 @@
 
     <nav class="sidebar" id="sidebar">
       <h2>MERN Reference</h2>
+      <p class="sidebar-home-top"><a href="../index.html">⌂ Home</a></p>
       <div class="search-wrap">
         <div class="search-field">
           <input
@@ -43,28 +44,31 @@
         <li><a href="../frontend/frontend.html#s13">13. RTK Query + Injection</a></li>
         <li><a href="../frontend/frontend.html#s14">14. React Boilerplate</a></li>
         <li><a href="../frontend/frontend.html#s15">15. WebSockets (Socket.IO)</a></li>
-        <li><a href="../devops/devops.html#s16">16. Dev Workflow</a></li>
+        <li><a href="../frontend/frontend.html#s16">16. React Native</a></li>
+        <li><a href="../devops/devops.html#s17">17. Dev Workflow</a></li>
         <li>
-          <a href="../devops/devops.html#s17">17. Testing (Jest + Supertest / Vitest)</a>
+          <a href="../devops/devops.html#s18">18. Testing (Jest + Supertest / Vitest)</a>
           <ul>
-            <li><a href="../devops/devops.html#s17a">A. API — Jest + Supertest</a></li>
-            <li><a href="../devops/devops.html#s17b">B. UI — Vitest + RTL</a></li>
+            <li><a href="../devops/devops.html#s18a">A. API — Jest + Supertest</a></li>
+            <li><a href="../devops/devops.html#s18b">B. UI — Vitest + RTL</a></li>
           </ul>
         </li>
         <li>
-          <a href="../reference/reference.html#s18">18. TypeScript Setup + Commands</a>
+          <a href="../reference/reference.html#s19">19. TypeScript Setup + Commands</a>
           <ul>
-            <li><a href="../reference/reference.html#s18a">A. Node / Express (CommonJS)</a></li>
-            <li><a href="../reference/reference.html#s18b">B. Vite (React / Vue)</a></li>
+            <li><a href="../reference/reference.html#s19a">A. Node / Express (CommonJS)</a></li>
+            <li><a href="../reference/reference.html#s19b">B. Vite (React / Vue)</a></li>
           </ul>
         </li>
-        <li><a href="../devops/devops.html#s19">19. CI/CD + Docs</a></li>
-        <li><a href="../devops/devops.html#s20">20. Docker Setup</a></li>
-        <li><a href="../devops/devops.html#s21">21. VPS + Nginx + SSL</a></li>
-        <li><a href="../devops/devops.html#s22">22. SSL &amp; Certificate Authority (CA)</a></li>
-        <li><a href="../reference/reference.html#s23">23. Commands Cheat Sheet</a></li>
-        <li><a href="../reference/reference.html#s24">24. Ubuntu Commands Cheat Sheet</a></li>
-        <li><a href="../reference/reference.html#s25">25. Git &amp; GitHub</a></li>
+        <li><a href="../devops/devops.html#s20">20. CI/CD + Docs</a></li>
+        <li><a href="../devops/devops.html#s21">21. Docker Setup</a></li>
+        <li><a href="../devops/devops.html#s22">22. VPS + Nginx + SSL</a></li>
+        <li><a href="../devops/devops.html#s23">23. SSL &amp; Certificate Authority (CA)</a></li>
+        <li><a href="../reference/reference.html#s24">24. Commands Cheat Sheet</a></li>
+        <li><a href="../reference/reference.html#s25">25. Ubuntu Commands Cheat Sheet</a></li>
+        <li><a href="../reference/reference.html#s26">26. Git &amp; GitHub</a></li>
+        <li><a href="../frontend/frontend.html#s27">27. Other JS Libraries</a></li>
+        <li><a href="../frontend/frontend.html#s28">28. Frontend — Animations</a></li>
       </ul>
       <p id="searchEmpty" class="search-empty" hidden>No sections match.</p>
       <p class="sidebar-home"><a href="../index.html">⌂ back to index</a></p>
@@ -72,10 +76,10 @@
 
     <main class="main-content">
       <h1>DevOps — Workflow, Testing &amp; Deploy</h1>
-      <p class="subtitle">Sections 16–17 and 19–22 — dev workflow, tests, CI/CD, Docker, VPS/Nginx, SSL.</p>
+      <p class="subtitle">Sections 17–18 and 20–23 — dev workflow, tests, CI/CD, Docker, VPS/Nginx, SSL.</p>
 
-      <!-- ==================== SECTION 16 ==================== -->
-      <h2 id="s16">16. Dev Workflow</h2>
+      <!-- ==================== SECTION 17 ==================== -->
+      <h2 id="s17">17. Dev Workflow</h2>
 
       <h3>install</h3>
       <pre><code>npm i -D concurrently</code></pre>
@@ -121,8 +125,8 @@
         </table>
       </div>
 
-      <!-- ==================== SECTION 17 ==================== -->
-      <h2 id="s17">17. Testing — Jest + Supertest (API) + Vitest + RTL (UI)</h2>
+      <!-- ==================== SECTION 18 ==================== -->
+      <h2 id="s18">18. Testing — Jest + Supertest (API) + Vitest + RTL (UI)</h2>
 
       <p>
         Two halves. The Express API is tested with
@@ -134,7 +138,7 @@
         part B.
       </p>
 
-      <h3 id="s17a">A. API — Jest + Supertest</h3>
+      <h3 id="s18a">A. API — Jest + Supertest</h3>
 
       <h3>install (server)</h3>
       <pre><code>npm i -D jest supertest</code></pre>
@@ -200,7 +204,7 @@ describe('Auth', () =&gt; {
         once with <code>--runInBand</code> to avoid parallel DB collisions.
       </div>
 
-      <h3 id="s17b">B. UI — Vitest + React Testing Library</h3>
+      <h3 id="s18b">B. UI — Vitest + React Testing Library</h3>
 
       <h3>install (client)</h3>
       <pre><code>npm i -D vitest jsdom @testing-library/react @testing-library/jest-dom @testing-library/user-event
@@ -394,7 +398,7 @@ describe('&lt;AppointmentsPage /&gt;', () =&gt; {
 "test:ui": "vitest --ui",         // browser UI (@vitest/ui)
 "coverage": "vitest run --coverage"</code></pre>
 
-      <h3>CI — add the client suite (Section 19)</h3>
+      <h3>CI — add the client suite (Section 20)</h3>
       <pre><code>- run: npm ci --prefix client
 - run: npm test --prefix client
 - run: npm ci --prefix server
@@ -440,8 +444,8 @@ describe('Auth', () =&gt; {
         those test files as ESM.
       </div>
 
-      <!-- ==================== SECTION 19 ==================== -->
-      <h2 id="s19">19. CI/CD + Docs</h2>
+      <!-- ==================== SECTION 20 ==================== -->
+      <h2 id="s20">20. CI/CD + Docs</h2>
 
       <h3>install</h3>
       <pre><code>npm i swagger-jsdoc swagger-ui-express</code></pre>
@@ -515,7 +519,7 @@ See server/.env.example and client/.env.example.
 
 ## Deployment
 Docker:  docker-compose up -d --build
-VPS:     pm2 + nginx + certbot (Section 21)
+VPS:     pm2 + nginx + certbot (Section 22)
 Docs:    /api-docs (Swagger UI)</code></pre>
 
       <div class="callout">
@@ -526,8 +530,8 @@ Docs:    /api-docs (Swagger UI)</code></pre>
         and run the Jest suite in CI before every deploy.
       </div>
 
-      <!-- ==================== SECTION 20 ==================== -->
-      <h2 id="s20">20. Docker Setup</h2>
+      <!-- ==================== SECTION 21 ==================== -->
+      <h2 id="s21">21. Docker Setup</h2>
 
       <h3>server/Dockerfile</h3>
       <pre><code>FROM node:20-alpine
@@ -634,8 +638,8 @@ dist
     }
 }</code></pre>
 
-      <!-- ==================== SECTION 21 ==================== -->
-      <h2 id="s21">21. VPS Setup + Nginx + SSL</h2>
+      <!-- ==================== SECTION 22 ==================== -->
+      <h2 id="s22">22. VPS Setup + Nginx + SSL</h2>
 
       <h3>install</h3>
       <pre><code>npm i -g pm2</code></pre>
@@ -707,8 +711,8 @@ cd ../client &amp;&amp; npm ci &amp;&amp; npm run build
 pm2 restart api
 sudo systemctl reload nginx</code></pre>
 
-      <!-- ==================== SECTION 22 ==================== -->
-      <h2 id="s22">22. SSL &amp; Certificate Authority (CA)</h2>
+      <!-- ==================== SECTION 23 ==================== -->
+      <h2 id="s23">23. SSL &amp; Certificate Authority (CA)</h2>
 
       <p>
         Three routes: <strong>self-signed</strong> (dev only),
@@ -767,7 +771,7 @@ https
   )
   .listen(8443);</code></pre>
 
-      <h3>public certificates — Let's Encrypt (reuse Section 21)</h3>
+      <h3>public certificates — Let's Encrypt (reuse Section 22)</h3>
       <pre><code>sudo apt install -y certbot python3-certbot-nginx
 sudo certbot --nginx -d yourdomain.com -d www.yourdomain.com
 sudo certbot renew --dry-run       # auto-renews via systemd timer</code></pre>
