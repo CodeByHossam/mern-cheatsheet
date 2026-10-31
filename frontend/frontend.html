@@ -529,6 +529,77 @@ export default function App() {
   );
 }</code></pre>
 
+      <h3>React Router Data Mode — additional APIs (reference only)</h3>
+      <p class="subtitle">
+        These APIs exist in Data Mode. In THIS project RTK Query owns all data fetching,
+        caching and mutations, so <code>loader</code>/<code>action</code> are NOT used for data.
+        They are documented here for completeness and for cases where you genuinely need
+        route-level work outside RTK.
+      </p>
+
+      <h4>loaders — fetch before render (NOT used for data here)</h4>
+      <pre><code>// A loader runs before the route renders. We deliberately do NOT fetch here;
+// RTK Query hooks (useGetUsersQuery, etc.) handle fetching/caching instead.
+// If you ever add one, keep it free of network calls that duplicate RTK.
+export async function userLoader({ params }) {
+  // return { id: params.id }; // shape consumed by useLoaderData()
+  return null;
+}</code></pre>
+
+      <h4>actions — form submissions / mutations (NOT used for data here)</h4>
+      <pre><code>// An action handles a &lt;Form&gt; submission. Mutations in this project go through
+// RTK Query mutation hooks (e.g. useLoginMutation) inside components.
+export async function loginAction({ request }) {
+  const formData = await request.formData();
+  // validate + call API, then redirect
+  return redirect('/dashboard');
+}</code></pre>
+
+      <h4>useNavigation — track in-flight navigation</h4>
+      <pre><code>import { useNavigation } from 'react-router-dom';
+
+export default function Navbar() {
+  const navigation = useNavigation();
+  const isNavigating = navigation.state !== 'idle'; // 'idle' | 'loading' | 'submitting'
+  return isNavigating ? &lt;span&gt;Loading...&lt;/span&gt; : null;
+}</code></pre>
+
+      <h4>useFetcher — submit without navigating</h4>
+      <pre><code>import { useFetcher } from 'react-router-dom';
+
+export default function LikeButton({ postId }) {
+  const fetcher = useFetcher();
+  const busy = fetcher.state !== 'idle';
+  return (
+    &lt;fetcher.Form method="post" action={`/posts/${postId}/like`}&gt;
+      &lt;button disabled={busy}&gt;{busy ? 'Liking...' : 'Like'}&lt;/button&gt;
+    &lt;/fetcher.Form&gt;
+  );
+}</code></pre>
+
+      <h4>error boundaries — route-specific errors</h4>
+      <pre><code>// Per-route:  errorElement: &lt;RouteError /&gt;  on any route object.
+// Global:     errorElement on the root route (we use &lt;ErrorPage /&gt;).
+// Inside:     useRouteError() + isRouteErrorResponse(error).</code></pre>
+
+      <h4>nested routes — layouts + pages</h4>
+      <pre><code>const router = createBrowserRouter([
+  {
+    path: '/',
+    element: &lt;Layout /&gt;,        // renders &lt;Outlet /&gt;
+    errorElement: &lt;ErrorPage /&gt;,
+    children: [
+      { index: true, element: &lt;Home /&gt; },
+      { path: 'login', element: &lt;Login /&gt; },
+      { element: &lt;ProtectedRoute /&gt;, children: [
+          { path: 'dashboard', element: &lt;Dashboard /&gt; },
+      ]},
+      { path: '*', element: &lt;NotFound /&gt; },
+    ],
+  },
+]);</code></pre>
+
+
       <h3>src/components/Layout.jsx</h3>
       <pre><code>import { Outlet } from 'react-router-dom';
 import Navbar from './Navbar';
